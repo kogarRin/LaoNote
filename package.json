@@ -1,0 +1,26 @@
+{
+  "name": "laonote",
+  "private": true,
+  "description": "LaoNote",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "electron/mainprocess.mjs",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development electron electron/mainprocess.mjs",
+    "build": "vite build",
+    "serve": "vite",
+    "start": "cross-env NODE_ENV=production electron electron/mainprocess.mjs"
+  },
+  "dependencies": {
+    "element-plus": "^2.10.4",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "cross-env": "^10.0.0",
+    "electron": "^37.2.4",
+    "sass": "^1.89.2",
+    "vite": "^7.0.4"
+  }
+}
