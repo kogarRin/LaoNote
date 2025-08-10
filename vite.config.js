@@ -9,6 +9,15 @@ export default defineConfig({
     strictPort: false
   },
   build:{
+    rollupOptions: {
+      input:{
+        preload: './electron/preload.cjs'
+      },
+      output:{
+        format: 'cjs',
+        entryFileNames: '[name].cjs'
+      }
+    },
     outDir: 'dist-electron',
     emptyDir: true
   },

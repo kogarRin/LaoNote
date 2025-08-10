@@ -1,9 +1,5 @@
 <script setup>
-import {ref} from 'vue';
 
-const eventFullscreen = ref({
-  isFullscreen: false
-})
 </script>
 
 <template>
