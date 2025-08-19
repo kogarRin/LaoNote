@@ -1,6 +1,9 @@
 <script setup>
 import Header from "./components/Header.vue";
-import Maincontainer from "./components/Maincontainer.vue";
+import Home from "./components/Home.vue";
+import Maincontain from "./components/Maincontain.vue";
+import Asidemenu from "./components/Asidemenu.vue";
+
 
 </script>
 
@@ -9,8 +12,10 @@ import Maincontainer from "./components/Maincontainer.vue";
     <el-header class="header">
       <Header />
     </el-header>
-    <el-container class="elmaincontainer">
-      <Maincontainer />
+    <el-container class="el-mainContainer">
+      <Asidemenu />
+      <router-view>
+      </router-view>
     </el-container>
   </el-container>
 </template>
@@ -20,7 +25,7 @@ import Maincontainer from "./components/Maincontainer.vue";
   padding: 0;
 }
 
-.elmaincontainer{
+.el-mainContainer{
   width: 100vw;
 }
 </style>

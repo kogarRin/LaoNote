@@ -1,20 +1,19 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-let win = null;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+let win;
 
 function createWindow() {
     win = new BrowserWindow({
         minWidth: 800,
-        minHeight: 600,
+        minHeight: 900,
         frame: false,
         webPreferences: {
-            contextIsolation: true,
-            nodeIntegration: false,
+            preload: path.join(__dirname, 'preload.js')
         },
     });
 
@@ -26,9 +25,6 @@ function createWindow() {
         win.loadFile(path.join(__dirname, '../index.html'));
     }
 
-    ipcMain.on('minimize-window', () => {
-        win.minimize();
-    });
 }
 
 app.whenReady().then(() => {

@@ -11,7 +11,7 @@ export default defineConfig({
   build:{
     rollupOptions: {
       input:{
-        preload: './electron/preload.cjs'
+        preload: './electron/preload.js'
       },
       output:{
         format: 'cjs',

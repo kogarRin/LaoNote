@@ -1,0 +1,71 @@
+<script setup lang="js">
+import {ref} from 'vue';
+import {Calendar, CollectionTag, Menu as IconMenu} from '@element-plus/icons-vue'
+
+const isCollapsed = ref(false);
+const calenderView = ref(false);
+</script>
+
+<template>
+  <!--日程框-->
+  <el-dialog
+      v-model="calenderView"
+      title="选择日期"
+      center
+  >
+    <div class="datePra">
+
+    </div>
+    <template #footer>
+      <div class="dialogFooter">
+        <el-button @click="calenderView = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="calenderView = false">
+          确认
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+  <!--菜单-->
+  <el-aside class="aside">
+    <el-menu
+        class="selectContain"
+        :collapse="isCollapsed"
+    >
+      <el-menu-item @click="isCollapsed = !isCollapsed" index="menu">
+        <el-icon id="menuIcon"><icon-menu /></el-icon>
+        <span class="menuContent">收起菜单</span>
+      </el-menu-item>
+      <el-menu-item index="2" @click="calenderView = !calenderView">
+        <el-icon id="menuIcon">
+          <el-icon><Calendar /></el-icon>
+        </el-icon>
+        <span class="menuContent">选择日程</span>
+      </el-menu-item>
+      <el-menu-item index="3">
+        <el-icon id="menuIcon">
+          <el-icon><CollectionTag /></el-icon>
+        </el-icon>
+        <span class="menuContent">一些标签</span>
+      </el-menu-item>
+    </el-menu>
+  </el-aside>
+
+</template>
+
+<style scoped lang="scss">
+.aside{
+  width:fit-content;
+
+}
+
+#menuIcon {
+  -webkit-user-select: none;
+}
+
+.menuContent {
+  -webkit-user-select: none;
+}
+</style>
