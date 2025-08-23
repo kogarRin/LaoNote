@@ -2,20 +2,25 @@
 import {ref} from "vue";
 
 
+const textContent = ref('');
+const filePath = ref('');
 const objDate = new Date();
 const titleContent = ref('');
 const editorStyle = ref(false);
-const textContent = ref(null);
+
 
 let mm = objDate.getMinutes() < 10 ? "0"+objDate.getMinutes() : objDate.getMinutes();
 const todayDate = (objDate.getMonth() + 1) + '月' + objDate.getDate() + '日' + ' | ' + objDate.getHours() + ':' + mm;
 const isMorning = objDate.getHours() <= 12 ? '上午' : '下午' ;
 
-let obj = [{"name": 'da', "age": '12'}, {"name": 'da', "age": '12'}];
-const set = JSON.stringify(obj);
-const doIt = ()=>{
-  console.log(set,obj,typeof set,typeof obj);
+
+async function handleSave(){
+  const selpath = await window.electronAPI.save(textContent.value, filePath.value);
+  if (selpath){
+    filePath.value = selpath;
+  }
 }
+
 </script>
 
 <template>
@@ -38,6 +43,7 @@ const doIt = ()=>{
             v-model="titleContent"
             placeholder="请输入文章标题"
             clearable
+
         />
       </div>
 
@@ -57,7 +63,7 @@ const doIt = ()=>{
             </el-switch>
           </div>
           <div class="saveText">
-            <el-button type="primary" @click="doIt" id="save">
+            <el-button type="primary" @click="handleSave" id="save">
               保存
             </el-button>
           </div>

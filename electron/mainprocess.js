@@ -1,11 +1,12 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { app, BrowserWindow, ipcMain, dialog} from 'electron';
+import {writeFile} from 'fs/promises';
+import {fileURLToPath} from 'url';
+import {join} from 'path';
+import path from 'path';
 
 let win;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function createWindow() {
     win = new BrowserWindow({
@@ -13,7 +14,9 @@ function createWindow() {
         minHeight: 900,
         frame: false,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false
         },
     });
 
@@ -22,15 +25,14 @@ function createWindow() {
     if (process.env.NODE_ENV === 'development') {
         win.loadURL(`http://localhost:5173`);
     } else {
-        win.loadFile(path.join(__dirname, '../index.html'));
+        win.loadFile(join(__dirname, '../index.html'));
     }
 
 }
 
 app.whenReady().then(() => {
     createWindow();
-    console.log(path.join(__dirname, '../index.html'));
-    console.log(process.env.NODE_ENV);
+
 });
 
 
@@ -39,3 +41,29 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
+ipcMain.handle('saveTxt', async (_, text, filePath) => {
+    if (!filePath){
+        const { canceled, filePath: picked } = await dialog.showSaveDialog({
+            filters:[{name: 'json', extensions:['json']}],
+        });
+        if (canceled || !picked){
+            return null;
+        }
+        filePath = picked;
+    }
+    await writeFile(filePath, text, 'utf8');
+    filePath = null;
+})
+
+ipcMain.handle('mini-window', async () => {
+    win.minimize();
+})
+
+ipcMain.handle('toggle-screen',  () => {
+    win.isFullScreen() ? win.setFullScreen(false) : win.setFullScreen(true);
+})
+
+ipcMain.handle('close-window', async () => {
+    win.close();
+})

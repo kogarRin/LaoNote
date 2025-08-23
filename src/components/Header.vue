@@ -1,6 +1,18 @@
 <script setup>
-
 import {CloseBold, FullScreen, SemiSelect} from "@element-plus/icons-vue";
+
+function miniSizeWin(){
+  window.electronAPI.miniWinSize();
+}
+
+function fullScreen(){
+  window.electronAPI.toggleScreen();
+}
+
+function closeWin(){
+  window.electronAPI.closeWindow();
+}
+
 </script>
 
 <template>
@@ -23,23 +35,23 @@ import {CloseBold, FullScreen, SemiSelect} from "@element-plus/icons-vue";
           text-color="#303133"
           active-text-color="6D7F9172">
         <el-menu-item index="home" route="/">首页</el-menu-item>
-        <el-menu-item index="personal" route="/about">说明</el-menu-item>
+        <el-menu-item index="personal" route="/settings">设置</el-menu-item>
       </el-menu>
     </div>
 
     <div class="rightHeader">
 
-      <div class="minIcons">
+      <div class="minIcons" @click="miniSizeWin">
         <el-icon>
           <el-icon><SemiSelect /></el-icon>
         </el-icon>
       </div>
-      <div class="maxIcons">
+      <div class="maxIcons" @click="fullScreen">
         <el-icon>
           <el-icon><FullScreen /></el-icon>
         </el-icon>
       </div>
-      <div class="closeIcon">
+      <div class="closeIcon" @click="closeWin">
         <el-icon>
           <el-icon><CloseBold /></el-icon>
         </el-icon>
@@ -92,14 +104,14 @@ import {CloseBold, FullScreen, SemiSelect} from "@element-plus/icons-vue";
       & > .el-menu-item{
         -webkit-user-select: none;
 
-        &:hover{
-          background-color: rgba(109, 127, 145, 0.45);
-        }
+          &:hover{
+            background-color: rgba(109, 127, 145, 0.45);
+          }
 
-        &::after{
-          display: none;
+          &::after{
+            display: none;
+          }
         }
-      }
     }
   }
 

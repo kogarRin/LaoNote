@@ -9,7 +9,7 @@ const routes = [
         path: '/editor', component: () => import('../components/Maincontain.vue')
     },
     {
-        path: '/about', component: () => import('../components/About.vue')
+        path: '/settings', component: () => import('../components/Settings.vue')
     }
 ]
 const router = createRouter(

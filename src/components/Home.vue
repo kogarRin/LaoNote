@@ -1,5 +1,4 @@
 <script setup>
-import {useRouter} from "vue-router";
 import router from "../router/index.js";
 
 const objDate = new Date();
@@ -11,7 +10,6 @@ const timeNow = objDate.getHours() + ':' + timeMinutes;
 function toEditor(){
   router.push('/editor');
 }
-
 
 </script>
 
