@@ -1,16 +1,39 @@
 <script setup>
 import router from "../router/index.js";
+import {useInput} from "../js/container.js";
+import {storeToRefs} from "pinia";
+import {onMounted} from "vue";
+import {List, Plus} from "@element-plus/icons-vue";
 
+// 获取当前日期
 const objDate = new Date();
 const todayDate = objDate.getFullYear() + ' / ' + (objDate.getMonth() + 1) + ' / ' + objDate.getDate();
-
 let timeMinutes = objDate.getMinutes() < 10 ? "0"+objDate.getMinutes() : objDate.getMinutes();
 const timeNow = objDate.getHours() + ':' + timeMinutes;
+let count;
 
+// 路由跳转
 function toEditor(){
-  router.push('/editor');
+  router.push({path:'/editor'});
 }
 
+//Pinia Store
+const homeShow = useInput();
+const {inputValue} = storeToRefs(homeShow);
+onMounted(() => {
+  homeShow.getInputValue();
+});
+
+
+//js-lite-rest Store
+async function debugging(){
+  const res = await window.electronAPI.getNotes();
+  console.log(res[0].title, typeof res, typeof [], Array.isArray(res));
+}
+
+async function liulanqi(){
+  console.log(typeof []);
+}
 </script>
 
 <template>
@@ -34,31 +57,43 @@ function toEditor(){
             <span>{{todayDate}}</span>
           </el-divider>
         </div>
+        <div class="forEditor">
+          <div class="editorButtonContain">
+            <el-button type="primary" size="small" @click="">
+              <el-icon><Plus /></el-icon><span>新建</span>
+            </el-button>
+            <el-button type="primary" size="small" @click="debugging">
+              <span>调试按钮</span>
+            </el-button>
+            <el-button type="primary" size="small" @click="liulanqi">
+              <span>浏览器调试</span>
+            </el-button>
+          </div>
+        </div>
 
-        <div class="textContainer" @click="toEditor">
-
-             <div class="textInfoContain">
-
-               <div class="upOne">
+        <ul style="padding: 0">
+          <li style="list-style-type: none;">
+            <div class="textContainer" @click="toEditor">
+              <div class="textInfoContain">
+                <div class="upOne">
                   <span class="titleText">
-                    <b>无标题</b>
+                    <b>{{inputValue}}</b>
                   </span>
-               </div>
-               <div class="downOne">
+                </div>
+                <div class="downOne">
                   <div class="downOneFirst">
                     <span class="textContent">
                       段落内容段落内容
                     </span>
                   </div>
                   <div>
-                     <span>编辑于{{timeNow}} 共000字</span>
+                    <span>编辑于{{timeNow}} 共 {{typeof count}} 字</span>
                   </div>
-               </div>
-
-             </div>
-
-        </div>
-
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </el-card>
     </el-space>
   </div>
@@ -78,6 +113,12 @@ function toEditor(){
   .insideContent{
     display: flex;
   }
+
+  .forEditor{
+    display: flex;
+    padding: 0 0 0 1em;
+  }
+
   .textContainer{
 
     .textInfoContain{

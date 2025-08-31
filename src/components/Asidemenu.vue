@@ -10,17 +10,14 @@ const calenderView = ref(false);
   <!--日程框-->
   <el-dialog
       v-model="calenderView"
-      title="选择日期"
+      title="查看日期"
       center
   >
     <div class="datePra">
-
+      <el-calendar/>
     </div>
     <template #footer>
       <div class="dialogFooter">
-        <el-button @click="calenderView = false">
-          取消
-        </el-button>
         <el-button type="primary" @click="calenderView = false">
           确认
         </el-button>

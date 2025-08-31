@@ -40,7 +40,6 @@ function closeWin(){
     </div>
 
     <div class="rightHeader">
-
       <div class="minIcons" @click="miniSizeWin">
         <el-icon>
           <el-icon><SemiSelect /></el-icon>

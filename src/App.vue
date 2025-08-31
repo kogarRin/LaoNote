@@ -1,10 +1,6 @@
 <script setup>
 import Header from "./components/Header.vue";
-import Home from "./components/Home.vue";
-import Maincontain from "./components/Maincontain.vue";
 import Asidemenu from "./components/Asidemenu.vue";
-
-
 </script>
 
 <template>
