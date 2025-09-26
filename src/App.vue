@@ -1,6 +1,6 @@
 <script setup>
-import Header from "./components/Header.vue";
-import Asidemenu from "./components/Asidemenu.vue";
+import Header from "@/src/components/Header.vue";
+import Asidemenu from "@/src/components/Asidemenu.vue";
 </script>
 
 <template>

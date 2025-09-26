@@ -1,18 +1,11 @@
 <script setup>
 import {onActivated, onMounted, ref} from "vue";
-import {getTodayDate} from "../js/container.js";
-import {useInput} from "../js/container.js";
-import {storeToRefs} from "pinia";
+import {getTodayDate} from "@/src/js/container.js";
 
 const textContent = ref('');
 const editorStyle = ref(false);
 const {todayDate, isMorning} = getTodayDate();
-const inputStore = useInput();
-const {inputValue} = storeToRefs(inputStore);
 
-onMounted(() => {
-  inputStore.getInputValue();
-});
 
 </script>
 
@@ -33,10 +26,9 @@ onMounted(() => {
       </div>
       <div class="inputTitleDiv">
         <el-input
-            v-model="inputValue"
+            v-model="textContent"
             placeholder="请输入文章标题"
             clearable
-
         />
       </div>
 
@@ -56,7 +48,7 @@ onMounted(() => {
             </el-switch>
           </div>
           <div class="saveText">
-            <el-button type="primary" @click="inputStore.setInputValue(inputValue)" id="save">
+            <el-button type="primary" id="save">
               保存
             </el-button>
           </div>

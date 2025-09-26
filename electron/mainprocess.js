@@ -2,19 +2,18 @@ import { app, BrowserWindow, ipcMain, dialog} from 'electron';
 import {fileURLToPath} from 'url';
 import path from 'path';
 import Store from 'electron-store';
-import JsLiteRest from 'js-lite-rest';
+import jsonDbToolClass, {DATA_DIR_PATH} from "../data/dbHandle.js";
 
 let win;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const fileDefault = new Store();
-const fileInput = new Store();
-const dbstore = await JsLiteRest.create('./data/db.json');
+const eleStore = new Store();
+const jsonToolInMain = new jsonDbToolClass(DATA_DIR_PATH);
 
 function createWindow() {
     win = new BrowserWindow({
         minWidth: 1000,
-        minHeight: 900,
+        minHeight: 800,
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -34,7 +33,6 @@ app.whenReady().then(() => {
     createWindow();
 });
 
-
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
@@ -42,49 +40,43 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle('get-save-path', async (_,key,def) => {
-    return  fileDefault.get(key, def);
+    return await eleStore.get(key, def);
 });
 
 
-ipcMain.handle('select-default', async (_) => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
-        properties:['openFile']
+ipcMain.handle('select-default', async () => {
+    const selectedRes = dialog.showOpenDialogSync(win, {
+        title: '选择文件',
+        properties: ['openFile']
     });
-    if (canceled || !filePaths)
+    if (!selectedRes) {
         return null;
-    const userSelect = filePaths[0];
-    fileDefault.set('saveDefault',userSelect);
-    return userSelect;
+    }
+    const [setFilePath] = selectedRes;
+    eleStore.set('saveDefault', setFilePath);
+
+    return setFilePath;
 });
 
-ipcMain.handle('mini-window', async () => {
-    await win.minimize();
+ipcMain.handle('mini-window',  () => {
+    win.minimize();
 });
 
-ipcMain.handle('toggle-screen', async () => {
+ipcMain.handle('toggle-screen',  () => {
     win.isMaximized() ? win.unmaximize() : win.maximize();
 });
 
-ipcMain.handle('close-window', async () => {
-    await win.close();
+ipcMain.handle('close-window',  () => {
+    win.close();
 });
 
-ipcMain.handle('get-input', async (_, key, def) =>{
-    return fileInput.get(key, def);
+ipcMain.handle('get-notes', () => {
+    return jsonToolInMain.loadJsonDb();
 });
 
-ipcMain.handle('set-input', async (_, userInput) => {
-    console.log(userInput);
-    if (userInput) {
-        fileInput.set('keyInput', userInput);
-        return userInput;
-    }
-});
+ipcMain.handle('add-note', () => {
+    return jsonToolInMain.addNoteJson();
+})
 
-ipcMain.handle('get-notes', async () => {
-    return await dbstore.get('notes');
-});
-
-ipcMain.handle('add-note', async (_, note) => {
-    dbstore.post('notes', {...note, createAt: new Date().toISOString()});
+ipcMain.handle('delete-note',  async (_, getIdArray)=>{
 })

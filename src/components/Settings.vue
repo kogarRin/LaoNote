@@ -1,18 +1,24 @@
 <script setup>
 import { InfoFilled } from "@element-plus/icons-vue"
-import { useFileInput } from "../js/handleSetting.js";
+import { useFileInput } from "@/src/js/handleSetting.js";
 import { storeToRefs } from "pinia";
 import {onMounted, ref} from "vue";
+import {buildJsonStructure} from "@/src/js/handleSetting.js";
+import {ElMessageConfig} from "@/src/setTypes/messageType.js";
+import {ElMessage} from "element-plus";
+
 
 const pathStore = useFileInput();
 const {pathSelect} = storeToRefs(pathStore);
-
-onMounted(()=>{
-  pathStore.reLoadPathStore();
-});
-
 const instructionView = ref(false);
 
+onMounted(async ()=>{
+  await pathStore.reLoadPathStore();
+});
+async function copyJson() {
+  await navigator.clipboard.writeText(JSON.stringify(buildJsonStructure));
+  ElMessage(ElMessageConfig.buildConfig('success', '复制成功',true, 2000));
+}
 </script>
 
 <template>
@@ -21,6 +27,7 @@ const instructionView = ref(false);
     :open-delay=100
     :before-close="()=>instructionView=false"
     center
+    :show-close="false"
   >
     <div>
       <h1 class="instructionTitle"><span>说明</span></h1>
@@ -28,8 +35,14 @@ const instructionView = ref(false);
     <div class="divideLine"></div>
     <div class="instructionContent">
       <span>
-        点击<button>浏览...</button>可选择文件的默认保存路径, 应用文件夹中有<strong>data</strong>目录,可以选择
+        点击<button>浏览...</button>可查看数据文件的详细保存路径
+      </span><br>
+      <span>
+        点击<button>复制</button>可将文件数据复制到剪贴板
       </span>
+    </div>
+    <div class="buttonContain">
+      <el-button type="primary" @click="instructionView=false">确定</el-button>
     </div>
   </el-dialog>
 
@@ -45,22 +58,35 @@ const instructionView = ref(false);
         </div>
         <el-divider/>
         <div class="setting-file">
-          <span>设置文件保存路径</span>
-          <el-icon id="infoFile" @click="instructionView=!instructionView"><InfoFilled /></el-icon>
-          <el-input
-              v-model="pathSelect"
-              class="inputDefaultPath"
-              clearable
-          >
-            <template #append>
+          <span>设置文件路径</span>
+          <el-tooltip placement="top" effect="dark" content="查看说明">
+            <el-icon id="infoFile" @click="instructionView=!instructionView"><InfoFilled /></el-icon>
+          </el-tooltip>
+          <div class="inputAndButton">
+            <el-input
+                v-model="pathSelect"
+                class="inputDefaultPath"
+                clearable
+            >
+              <template #append>
+                <el-button
+                    type="primary"
+                    @click="pathStore.selectAndSave()"
+                >
+                  浏览...
+                </el-button>
+              </template>
+            </el-input>
+            <el-tooltip placement="top" effect="dark" content="点击复制 json" >
               <el-button
-                type="primary"
-                @click="pathStore.selectAndSave()"
+                  type="primary"
+                  id="copyButton"
+                  @click="copyJson()"
               >
-                浏览...
+                复制
               </el-button>
-            </template>
-          </el-input>
+            </el-tooltip>
+          </div>
         </div>
       </el-card>
     </el-space>
@@ -79,6 +105,7 @@ const instructionView = ref(false);
   & span{
     margin: .5em;
     color: #1e1d1d;
+    font-size: 2em;
 
     & strong{
       background-color: #837f7f;
@@ -94,14 +121,18 @@ const instructionView = ref(false);
   }
   & span{
     color: #1e1d1d;
+    font-size: 1.4em;
 
     & strong{
       margin: 0 .5em;
-      border: solid 1px #d3cfcf;
-      background-color: #dfdcdc;
-      border-radius: .5em;
     }
   }
+}
+
+.buttonContain{
+  margin: 2em 0 0 0;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .settingsContainer{
@@ -124,10 +155,16 @@ const instructionView = ref(false);
       }
     }
 
-    .inputDefaultPath{
-      width: 250px;
+    .inputAndButton{
       position: absolute;
       right: 0;
+      display: flex;
+      gap: .5em;
+
+      .inputDefaultPath{
+        width: 250px;
+      }
+
     }
   }
 

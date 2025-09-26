@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from "path";
 
 
 export default defineConfig({
@@ -8,18 +9,10 @@ export default defineConfig({
     port: 5173,
     strictPort: false
   },
-  build:{
-    rollupOptions: {
-      input:{
-        preload: './electron/preload.js'
-      },
-      output:{
-        format: 'cjs',
-        entryFileNames: '[name].cjs'
-      }
-    },
-    outDir: 'dist-electron',
-    emptyDir: true
-  },
   base: './',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname)
+    }
+  }
 })

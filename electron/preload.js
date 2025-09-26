@@ -6,8 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeWindow: () => ipcRenderer.invoke('close-window'),
     selectDefault: () => ipcRenderer.invoke('select-default'),
     getSavePath: () => ipcRenderer.invoke('get-save-path','saveDefault',''),
-    getInput: () => ipcRenderer.invoke('get-input','keyInput',''),
-    saveInput: (useInput) => ipcRenderer.invoke('set-input',useInput),
-    getNotes: () => ipcRenderer.invoke('get-notes'),
+    getNotes: () => ipcRenderer.invoke('get-notes'), //获取记录唯一接口，返回Object[]
+    addNotes: () => ipcRenderer.invoke('add-note'),
+    deleteNote: (idArray) => ipcRenderer.invoke('delete-note', idArray),
 });
 console.log('preload.js loaded');

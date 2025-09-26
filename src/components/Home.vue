@@ -1,44 +1,55 @@
 <script setup>
-import router from "../router/index.js";
-import {useInput} from "../js/container.js";
-import {storeToRefs} from "pinia";
-import {onMounted} from "vue";
-import {List, Plus} from "@element-plus/icons-vue";
+import {onMounted, ref} from "vue";
+import {Delete, Plus, Refresh} from "@element-plus/icons-vue";
+import router from "@/src/router/index.js";
+import {
+  getDate,
+  notesFromDb,
+  listener,
+  isEditorModal,
+  addOneNote,
+  selectedNoteIDs,
+  deleteNote,
+  debugging,
+  initNotes,
+  refresh
+} from "@/src/js/homeHandle.js";
 
-// 获取当前日期
-const objDate = new Date();
-const todayDate = objDate.getFullYear() + ' / ' + (objDate.getMonth() + 1) + ' / ' + objDate.getDate();
-let timeMinutes = objDate.getMinutes() < 10 ? "0"+objDate.getMinutes() : objDate.getMinutes();
-const timeNow = objDate.getHours() + ':' + timeMinutes;
-let count;
-
-// 路由跳转
+//路由
 function toEditor(){
   router.push({path:'/editor'});
 }
 
-//Pinia Store
-const homeShow = useInput();
-const {inputValue} = storeToRefs(homeShow);
-onMounted(() => {
-  homeShow.getInputValue();
+//时间
+const {todayDate, timeNow} = getDate();
+
+
+onMounted( async () => {
+  await initNotes();
 });
 
-
-//js-lite-rest Store
-async function debugging(){
-  const res = await window.electronAPI.getNotes();
-  console.log(res[0].title, typeof res, typeof [], Array.isArray(res));
-}
-
-async function liulanqi(){
-  console.log(typeof []);
-}
 </script>
 
 <template>
 
 <!-- 内容-->
+  <el-dialog
+    v-model="listener"
+    :show-close="false"
+  >
+    <div class="noticesTitle">
+      <h2>提示</h2>
+    </div>
+    <div class="divideLine"></div>
+    <div class="createNotices">
+      <span>存在内容为空的记录，是否继续新建？</span>
+    </div>
+    <div class="createNoticesButton">
+      <el-button type="default"  @click="()=>listener=!listener">取消</el-button>
+      <el-button type="primary"  @click="">确定</el-button>
+    </div>
+  </el-dialog>
+
   <div class="mainContentContain">
     <el-space
         style="width: 100%"
@@ -59,41 +70,54 @@ async function liulanqi(){
         </div>
         <div class="forEditor">
           <div class="editorButtonContain">
-            <el-button type="primary" size="small" @click="">
+            <el-button type="primary" size="small" @click="addOneNote">
               <el-icon><Plus /></el-icon><span>新建</span>
             </el-button>
             <el-button type="primary" size="small" @click="debugging">
-              <span>调试按钮</span>
+              <span>渲染调试</span>
             </el-button>
-            <el-button type="primary" size="small" @click="liulanqi">
-              <span>浏览器调试</span>
+            <el-button type="success" size="small" @click="listener=!listener">
+              <span>弹窗</span>
+            </el-button>
+            <el-icon id="refreshIcon"
+                     @click="refresh"
+            >
+              <Refresh />
+            </el-icon>
+            <el-button id="editorButton" @click="()=>isEditorModal=!isEditorModal">
+              <span>{{ isEditorModal? '取消' : '编辑' }}</span>
+            </el-button>
+            <el-button type="danger" :icon="Delete" @click="deleteNote" circle>
+
             </el-button>
           </div>
         </div>
 
         <ul style="padding: 0">
-          <li style="list-style-type: none;">
+          <li style="list-style-type: none;" v-for="eachNote in notesFromDb" :key="eachNote.id" class="contentsList">
+            <input v-if="isEditorModal" type="checkbox" :value="eachNote.id" v-model="selectedNoteIDs">
             <div class="textContainer" @click="toEditor">
               <div class="textInfoContain">
                 <div class="upOne">
                   <span class="titleText">
-                    <b>{{inputValue}}</b>
+                    <b>{{eachNote.title}}</b>
                   </span>
                 </div>
                 <div class="downOne">
                   <div class="downOneFirst">
                     <span class="textContent">
-                      段落内容段落内容
+                      {{ eachNote.content? `${eachNote.content.trim().slice(0, 32)}......` : "暂无内容"}}
                     </span>
                   </div>
-                  <div>
-                    <span>编辑于{{timeNow}} 共 {{typeof count}} 字</span>
+                  <div class="downOneSecond">
+                    <span>编辑于{{timeNow}} 共</span><span id="wordCount">{{eachNote.content ? eachNote.content.trim().length : 0}}</span><span>字</span>
                   </div>
                 </div>
               </div>
             </div>
           </li>
         </ul>
+
       </el-card>
     </el-space>
   </div>
@@ -101,52 +125,106 @@ async function liulanqi(){
 </template>
 
 <style scoped lang="scss">
-.mainContentContain{
-  padding: 1em;
-  width: 100%;
+.noticesTitle{
+  display: flex;
+  margin: 0 0 0 .5em;
 
-
-  .insideTitle{
-    display:flex;
-  }
-
-  .insideContent{
-    display: flex;
-  }
-
-  .forEditor{
-    display: flex;
-    padding: 0 0 0 1em;
-  }
-
-  .textContainer{
-
-    .textInfoContain{
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-      margin: .8em;
-      border: solid rgba(109, 127, 145, 0.45) 2px;
-      border-radius: .2em;
-
-      &:hover{
-        box-shadow: 0 0 10px rgba(149, 183, 209, 0.68);
-        cursor: pointer;
-      }
-
-      .upOne{
-        margin: .8em;
-      }
-
-      .downOne{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin: 0 .8em .8em .8em;
-      }
-    }
-
+  & h2{
+    margin: 0;
   }
 }
 
+.divideLine{
+  margin: .5em;
+  border: solid 1px #d3cfcf;
+}
+
+.createNotices{
+  display: flex;
+  margin: 0 0 1em .5em;
+}
+
+.createNoticesButton{
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 0 1em .5em 0;
+
+  & button{
+    margin-right: .5em;
+  }
+}
+
+.mainContentContain {
+  padding: 1em;
+  width: 100%;
+
+  .insideTitle {
+    display: flex;
+  }
+
+  .insideContent {
+    display: flex;
+  }
+
+  .forEditor {
+    display: flex;
+    padding: 0 0 0 1em;
+    position: relative;
+
+    #refreshIcon {
+      position: absolute;
+      right: 14px;
+      top: 5px;
+      font-size: 1.5em;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    #editorButton {
+      position: absolute;
+      right: 50px;
+    }
+  }
+
+  .contentsList{
+    display: flex;
+
+    .textContainer{
+        width: 100%;
+
+      .textInfoContain{
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        margin: .8em;
+        border: solid rgba(109, 127, 145, 0.45) 2px;
+        border-radius: .2em;
+
+        &:hover{
+          box-shadow: 0 0 10px rgba(149, 183, 209, 0.68);
+          cursor: pointer;
+        }
+
+        .upOne{
+          margin: .8em;
+
+          .titleText{
+            user-select: none;
+          }
+        }
+
+        .downOne{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin: 0 .8em .8em .8em;
+          user-select: none;
+        }
+      }
+
+    }
+  }
+}
 </style>
