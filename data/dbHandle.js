@@ -3,10 +3,8 @@ import {Low} from "lowdb";
 import {doomString} from "../doNotOpen.js";
 import {JSONFile} from "lowdb/node";
 import {fileURLToPath} from "url";
-import {ElMessage} from "element-plus";
 import {randomBytes} from "node:crypto"
-import {listener} from "../src/js/homeHandle.js";
-import {ElMessageConfig} from "../src/setTypes/messageType.js";
+import loadsh from "loadsh";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +36,7 @@ export default class jsonDbToolClass {
         }
     }
 
-    addNoteJson(){
+    async addNoteJson(){ //直接添加逻辑
         const emptyNoteType = ()=> ({
             "title": "无标题",
             "content": "",
@@ -46,14 +44,41 @@ export default class jsonDbToolClass {
             "id": this.#setIdPrototype(),
         })
         try {
-            this.#jsonDb.read()
+            this.#jsonDb.read();
             this.#jsonDb.data.notes.push(emptyNoteType());
             this.#jsonDb.write();
+            return null;
         } catch (err){
+            return null;
+        }
+    }
+
+    async deleteNoteJson(idArray){
+        this.#jsonDb.read();
+        if (Array.isArray(idArray) || idArray.length !== 0) {
+            loadsh.remove(this.#jsonDb.data.notes, item => idArray.includes(item.id));
+            this.#jsonDb.write();
+        }
+        return null;
+    }
+
+    async updateNoteJson(newNote){
+        this.#jsonDb.read();
+        const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === newNote.id)
+        try {
+            if (noteIndexForUpdate === -1) {
+                return null;
+            } else {
+                this.#jsonDb.update(({notes})=>{
+                    notes[noteIndexForUpdate] = newNote;
+                })
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
             return null;
         }
     }
 }
 
-let test = new jsonDbToolClass(DATA_DIR_PATH);
-console.log(doomString.b);
+console.log(doomString.c);

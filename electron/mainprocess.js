@@ -12,8 +12,8 @@ const jsonToolInMain = new jsonDbToolClass(DATA_DIR_PATH);
 
 function createWindow() {
     win = new BrowserWindow({
-        minWidth: 1000,
-        minHeight: 800,
+        minWidth: 1200,
+        minHeight: 900,
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -74,9 +74,14 @@ ipcMain.handle('get-notes', () => {
     return jsonToolInMain.loadJsonDb();
 });
 
-ipcMain.handle('add-note', () => {
-    return jsonToolInMain.addNoteJson();
+ipcMain.handle('add-note', async () => {
+    await jsonToolInMain.addNoteJson();
 })
 
-ipcMain.handle('delete-note',  async (_, getIdArray)=>{
+ipcMain.handle('delete-note',  async (_,toDeleteIdArray)=>{
+    await jsonToolInMain.deleteNoteJson(toDeleteIdArray);
+})
+
+ipcMain.handle('update-note',  async (_,newNote)=>{
+    await jsonToolInMain.updateNoteJson(newNote);
 })
