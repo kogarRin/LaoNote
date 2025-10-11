@@ -1,6 +1,14 @@
 <script setup>
-import Header from "@/src/components/Header.vue";
-import Asidemenu from "@/src/components/Asidemenu.vue";
+import Header from "@/src/components/basicViews/Header.vue";
+import Asidemenu from "@/src/components/basicViews/Asidemenu.vue";
+import {onMounted} from "vue";
+import {useRouter} from "vue-router";
+const router = useRouter();
+onMounted(() => {
+  if(router.currentRoute.value.path === "/") {
+    router.push("/");
+  }
+});
 </script>
 
 <template>
@@ -9,9 +17,9 @@ import Asidemenu from "@/src/components/Asidemenu.vue";
       <Header />
     </el-header>
     <el-container class="el-mainContainer">
-      <Asidemenu />
-      <router-view>
-      </router-view>
+          <Asidemenu />
+          <router-view>
+          </router-view>
     </el-container>
   </el-container>
 </template>
@@ -19,6 +27,7 @@ import Asidemenu from "@/src/components/Asidemenu.vue";
 <style scoped lang="scss">
 .header{
   padding: 0;
+  height: 50px;
 }
 
 .el-mainContainer{

@@ -1,5 +1,8 @@
 <script setup>
 import {CloseBold, FullScreen, SemiSelect} from "@element-plus/icons-vue";
+import {ref} from "vue";
+
+const home = ref('home');
 
 function miniSizeWin(){
   window.electronAPI.miniWinSize();
@@ -19,7 +22,7 @@ function closeWin(){
   <div class="header">
 
     <div class="leftHeader">
-      <img alt="Flied" class="icon" src="/src/assets/b6233c2ee16a424a.jpg"/>
+      <img alt="Flied" class="icon" src="/public/icon/icon.ico"/>
       <div class="appTitle">
         <span>LaoNote</span>
       </div>
@@ -27,15 +30,20 @@ function closeWin(){
 
     <div class="centerHeader">
       <el-menu
-          class="el-menu-demo"
-          mode="horizontal"
-          :ellipsis="false"
-          router
-          background-color="transparent"
-          text-color="#303133"
-          active-text-color="6D7F9172">
-        <el-menu-item index="home" route="/">首页</el-menu-item>
-        <el-menu-item index="personal" route="/settings">设置</el-menu-item>
+        class="menuHeader"
+        mode="horizontal"
+        router
+        active-text-color="#1f2024"
+        background-color="5881A39B"
+        :ellipsis="false"
+        :default-active="home"
+      >
+        <el-menu-item index="home" route="/">
+          首页
+        </el-menu-item>
+        <el-menu-item index="setting" route="/settings">
+          设置
+        </el-menu-item>
       </el-menu>
     </div>
 
@@ -60,8 +68,8 @@ function closeWin(){
 </template>
 
 <style scoped lang="scss">
+$headerHeight: 50px;
 .header {
-  $headerHeight: 40px;
 
   display: flex;
   flex-direction: row;
@@ -69,6 +77,7 @@ function closeWin(){
   justify-content: center;
   position: relative;
   width: 100vw;
+  height: $headerHeight;
   background-color: rgba(88, 129, 163, 0.61);
   -webkit-app-region: drag;
 
@@ -95,24 +104,17 @@ function closeWin(){
     width:fit-content;
     -webkit-app-region: no-drag;
 
-    .el-menu-demo{
-      background-color: rgba(88, 129, 163, 0.61);
-      border-bottom: none;
-      caret-color: transparent;
+    .menuHeader {
+      height: ($headerHeight + 2px);
 
-      & > .el-menu-item{
-        -webkit-user-select: none;
+      .el-menu-item {
+        height: 100%;
 
-          &:hover{
-            background-color: rgba(109, 127, 145, 0.45);
-          }
+      }
 
-          &::after{
-            display: none;
-          }
-        }
     }
   }
+
 
   .rightHeader {
     display: flex;
@@ -122,28 +124,28 @@ function closeWin(){
     cursor: pointer;
     -webkit-app-region: no-drag;
 
-    .minIcons{
+    .minIcons {
       padding: 1em;
 
-      &:hover{
+      &:hover {
         background-color: rgba(109, 127, 145, 0.45);
       }
     }
 
-    .maxIcons{
+    .maxIcons {
       padding: 1em;
 
-      &:hover{
+      &:hover {
         background-color: rgba(109, 127, 145, 0.45);
       }
     }
 
-    .closeIcon{
+    .closeIcon {
       padding: 1em;
 
-       &:hover{
-         background-color: rgba(255, 9, 0, 0.68);
-       }
+      &:hover {
+        background-color: rgba(255, 9, 0, 0.68);
+      }
     }
   }
 }

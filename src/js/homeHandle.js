@@ -10,20 +10,9 @@ export const isEditorModal = ref(false);
 export const selectedNoteIDs = ref([]);
 export const showSkeleton = ref(true);
 
-//显示时间
-export function getDate(){
-    const objDate = new Date();
-    const todayDate = `${objDate.getFullYear()} / ${(objDate.getMonth() + 1)} / ${objDate.getDate()}`;
-    let timeMinutes = objDate.getMinutes() < 10 ? `0${objDate.getMinutes()}` : `${objDate.getMinutes()}`;
-    const timeNow = `${objDate.getHours()} : ${timeMinutes}`;
-    return{
-        todayDate,
-        timeNow
-    }
-}
 
 
-export async function initNotes(){ //仅用于初始化，多次调用可能会导致弹窗重复 awa
+export async function initNotes(){ //仅用于初始化，多次调用可能会导致弹窗重复
     const setInitNotes = await window.electronAPI.getNotes();
     if (!isInit.value){
         try {
@@ -72,13 +61,13 @@ export async function addOneNote() {
             notesFromDb.value = await getNotesData();
             return null;
         }
-        if (curNotes) {
+        if ((curNotes.reverse()[0].content && curNotes.reverse()[0].content.trim() !== "")) {
             await window.electronAPI.addNotes();
             ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
             notesFromDb.value = await getNotesData();
             return null;
         } else {
-            ElMessage(ElMessageConfig.buildConfig("error", "性能较弱，请先删除空白记录哦~~", true, 1000))
+            ElMessage(ElMessageConfig.buildConfig("error", "性能较弱，请先编辑空白记录哦~~", true, 1500))
         }
     } catch (error) {
         console.error(error);
@@ -90,10 +79,8 @@ export async function addOneNote() {
 
 
 //删除部分
-
 export async function deleteNote() {
     const deleteIdArray = [...selectedNoteIDs.value];
-    console.log(deleteIdArray, Object.prototype.toString.call(deleteIdArray));
     try {
         if (deleteIdArray.length === 0) {
             ElMessage(ElMessageConfig.buildConfig("error", "请先选择要删除的记录！", true, 1000));
@@ -152,9 +139,4 @@ export async function refresh(){
     if (notesFromDb.value.length === 0 || notesFromDb.value) {
         ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 1000));
     }
-}
-
-//调试
-export function debugging(){
-   console.log(notesFromDb.value,Array.isArray(notesFromDb.value));
 }

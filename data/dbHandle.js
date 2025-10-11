@@ -1,21 +1,24 @@
 import path from 'path';
 import {Low} from "lowdb";
-import {doomString} from "../doNotOpen.js";
+import {app} from "electron";
 import {JSONFile} from "lowdb/node";
 import {fileURLToPath} from "url";
 import {randomBytes} from "node:crypto"
-import loadsh from "loadsh";
+import lodash from "lodash";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-export const DATA_DIR_PATH = path.join(__dirname, 'db.json');
+export const getDataDir = () => {
+    const isDev = process.env.NODE_ENV === 'development';
+    return isDev ? path.join(__dirname, 'db.json') : path.join(app.getPath('userData'),'data','db.json')
+};
 
 export default class jsonDbToolClass {
     #fileBasePath;
     #jsonDb
 
     constructor() {
-        this.#fileBasePath = DATA_DIR_PATH;
+        this.#fileBasePath = getDataDir();
         const adapter = new JSONFile(this.#fileBasePath);
         this.#jsonDb = new Low(adapter, {notes: []});
     }
@@ -40,7 +43,7 @@ export default class jsonDbToolClass {
         const emptyNoteType = ()=> ({
             "title": "无标题",
             "content": "",
-            "createAt": new Date().toISOString(),
+            "createAt": new Date(),
             "id": this.#setIdPrototype(),
         })
         try {
@@ -56,7 +59,7 @@ export default class jsonDbToolClass {
     async deleteNoteJson(idArray){
         this.#jsonDb.read();
         if (Array.isArray(idArray) || idArray.length !== 0) {
-            loadsh.remove(this.#jsonDb.data.notes, item => idArray.includes(item.id));
+            lodash.remove(this.#jsonDb.data.notes, item => idArray.includes(item.id));
             this.#jsonDb.write();
         }
         return null;
@@ -81,4 +84,3 @@ export default class jsonDbToolClass {
     }
 }
 
-console.log(doomString.c);

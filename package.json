@@ -1,21 +1,45 @@
 {
   "name": "laonote",
-  "private": true,
-  "description": "LaoNote",
-  "version": "0.0.0",
+  "version": "0.1.1",
+  "description": "LaoNote编辑器",
+  "author": "Kogar",
   "type": "module",
   "main": "electron/mainprocess.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development electron electron/mainprocess.js",
+    "dev": "cross-env NODE_ENV=development electron .",
     "serve": "vite",
-    "start": "cross-env NODE_ENV=production electron electron/mainprocess.js"
+    "dist": "vite build",
+    "build": "vite build && electron-builder",
+    "clean": "rimraf release dist"
+  },
+  "build": {
+    "appId": "com.kogar.laonote",
+    "productName": "LaoNote编辑器",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "data/**/*",
+      "electron/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "public/icon/icon.ico"
+    }
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
-    "depcheck": "^1.4.7",
     "electron-store": "^10.1.0",
     "element-plus": "^2.10.4",
-    "loadsh": "^0.0.4",
+    "lodash": "^4.17.21",
     "lowdb": "^7.0.1",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
@@ -24,8 +48,9 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "cross-env": "^10.0.0",
-    "electron": "^37.2.4",
-    "sass": "^1.89.2",
+    "electron": "^37.6.0",
+    "electron-builder": "^26.0.12",
+    "rimraf": "^6.0.1",
     "vite": "^7.0.4"
   }
 }

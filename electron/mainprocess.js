@@ -1,19 +1,22 @@
-import { app, BrowserWindow, ipcMain, dialog} from 'electron';
+import { app, BrowserWindow, ipcMain} from 'electron';
 import {fileURLToPath} from 'url';
+import {mkdir} from 'fs/promises';
 import path from 'path';
-import Store from 'electron-store';
-import jsonDbToolClass, {DATA_DIR_PATH} from "../data/dbHandle.js";
+import jsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
 
 let win;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const eleStore = new Store();
-const jsonToolInMain = new jsonDbToolClass(DATA_DIR_PATH);
+const jsonToolInMain = new jsonDbToolClass();
+const dbFile = getDataDir();          // 第一次算路径
+mkdir(path.dirname(dbFile), { recursive: true }).catch(() => {});
+
 
 function createWindow() {
     win = new BrowserWindow({
-        minWidth: 1200,
-        minHeight: 900,
+        minWidth: 1000,
+        minHeight: 750,
+        icon: path.join(__dirname, '../src/assets/icon.ico'),
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -22,10 +25,12 @@ function createWindow() {
         },
     });
 
-    win.webContents.openDevTools();
 
     if (process.env.NODE_ENV === 'development') {
-        win.loadURL(`http://localhost:5173`);
+        win.webContents.openDevTools();
+        win.loadURL('http://localhost:5173');
+    } else {
+        win.loadFile(path.join(__dirname, '../dist/index.html'))
     }
 }
 
@@ -39,24 +44,6 @@ app.on('window-all-closed', () => {
     }
 });
 
-ipcMain.handle('get-save-path', async (_,key,def) => {
-    return await eleStore.get(key, def);
-});
-
-
-ipcMain.handle('select-default', async () => {
-    const selectedRes = dialog.showOpenDialogSync(win, {
-        title: '选择文件',
-        properties: ['openFile']
-    });
-    if (!selectedRes) {
-        return null;
-    }
-    const [setFilePath] = selectedRes;
-    eleStore.set('saveDefault', setFilePath);
-
-    return setFilePath;
-});
 
 ipcMain.handle('mini-window',  () => {
     win.minimize();

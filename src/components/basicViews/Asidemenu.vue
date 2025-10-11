@@ -2,7 +2,7 @@
 import {ref} from 'vue';
 import {Calendar, CollectionTag, Menu as IconMenu} from '@element-plus/icons-vue'
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(true);
 const calenderView = ref(false);
 </script>
 

@@ -1,17 +1,17 @@
 <script setup>
-import {onBeforeRouteLeave, useRoute} from "vue-router";
-import {getTodayDate} from "@/src/js/container.js";
+import {onBeforeRouteLeave, useRoute,useRouter} from "vue-router";
 import {notesFromDb, updateNote} from "@/src/js/homeHandle.js";
 import {ref, toRaw} from "vue";
 import {ElMessageBox} from "element-plus";
 import {Back} from "@element-plus/icons-vue";
 
-const {todayDate, isMorning} = getTodayDate();
-const router = useRoute();
+const objDate = new Date();
+const router = useRouter();
+const route = useRoute();
 
 //最初从db获取的note，不会改变
 let editNoteObj = toRaw(
-    notesFromDb.value.find(item => item.id === router.params.id)
+    notesFromDb.value.find(item => item.id === route.params.id)
 )
 
 const contentRef = ref(editNoteObj.content);
@@ -25,6 +25,9 @@ function sendUpdateNote(){
   })
   return JSON.parse(JSON.stringify(sendUpdateNote))
 }
+function toShowForm(){
+  router.push({name: "showNote"});
+}
 
 onBeforeRouteLeave((to, from, next) => {
   const currentNote = sendUpdateNote()
@@ -32,7 +35,7 @@ onBeforeRouteLeave((to, from, next) => {
   if (currentNote.content === editNoteObj.content && currentNote.title === editNoteObj.title) {
     return next();
   } else {
-    const getNewNoteDb = toRaw(notesFromDb.value.find(item => item.id === router.params.id))
+    const getNewNoteDb = toRaw(notesFromDb.value.find(item => item.id === route.params.id))
     //这里currentNote再和getNewDb比较，如果已经保存，newDb会改变
     const isSaved = () => (
       currentNote.content === getNewNoteDb.content && currentNote.title === getNewNoteDb.title
@@ -43,12 +46,13 @@ onBeforeRouteLeave((to, from, next) => {
       ElMessageBox.confirm('当前内容未保存，是否保存？', '提示',{
         confirmButtonText: '保存',
         cancelButtonText: '取消',
+        showClose: false,
         callback: (action) => {
           if (action === 'confirm') {
             updateNote(sendUpdateNote());
             next();
           } else {
-            return null;
+            return next();
           }
         }
       })
@@ -69,12 +73,12 @@ onBeforeRouteLeave((to, from, next) => {
 
       <div class="inputTitle">
         <div>
-          <h4>{{todayDate}} {{isMorning}}</h4>
+          <h4>{{`${(objDate.getMonth() + 1)}月${objDate.getDate()}日`}}{{objDate.getHours() <= 12 ? '上午' : '下午'}}</h4>
           <h1>请输入标题</h1>
         </div>
         <div class="buttonDiv">
           <div>
-            <el-button text @click="">
+            <el-button text @click="toShowForm">
               <el-icon size="18px"><Back /></el-icon>
             </el-button>
             <el-button type="primary" @click="updateNote(sendUpdateNote())">保存</el-button>
@@ -112,7 +116,7 @@ onBeforeRouteLeave((to, from, next) => {
     </el-card>
     <el-card>
       <div class="tips">
-        <h1 style="text-align: center;">全屏编辑效果更好 ~ ((≧︶≦*)</h1>
+        <h1 style="text-align: center;">增大窗口尺寸效果更好 ~ ((≧︶≦*)</h1>
       </div>
     </el-card>
   </el-space>
@@ -164,7 +168,7 @@ onBeforeRouteLeave((to, from, next) => {
 
     .commonEditor{
       height: 90%;
-      padding: 1em 0 1em 0;
+      margin: 1em 0 1em 0;
       overflow: auto;
     }
 
