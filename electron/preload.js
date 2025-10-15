@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     addNotes: () => ipcRenderer.invoke('add-note'),
     deleteNote: (getIdArray) => ipcRenderer.invoke('delete-note', getIdArray),
     updateNote: (newNote) => ipcRenderer.invoke('update-note',newNote),
+    outputTxt: (title, content) => ipcRenderer.invoke('save-txt-file',title,content),
 });
 console.log('preload.js loaded');

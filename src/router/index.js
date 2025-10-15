@@ -8,7 +8,7 @@ const routes = [
         path: '/edit/:id', name: 'edit' ,component: () => import('../components/editAndShow/Edit.vue')
     },
     {
-        path: '/settings', component: () => import('../components/setting/Settings.vue')
+        path: '/settings', component: () => import('../components/setting/Settingdialog.vue')
     },
     {
         path: '/showNote/:id', name: 'showNote',props: true,component: ()=> import('../components/editAndShow/showForm.vue')

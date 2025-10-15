@@ -1,7 +1,7 @@
 <script setup>
 import {InfoFilled} from "@element-plus/icons-vue";
 import {isCopy} from "@/src/js/handleSetting.js";
-import {instructionView, editView, copyJson} from "@/src/js/container.js";
+import {instructionView, editView, copyJson} from "@/src/js/mainSetting.js";
 
 
 </script>

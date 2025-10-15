@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain} from 'electron';
+import { app, BrowserWindow, ipcMain,dialog} from 'electron';
 import {fileURLToPath} from 'url';
 import {mkdir} from 'fs/promises';
 import path from 'path';
 import jsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
+import * as fs from "node:fs";
 
 let win;
 const __filename = fileURLToPath(import.meta.url);
@@ -71,4 +72,26 @@ ipcMain.handle('delete-note',  async (_,toDeleteIdArray)=>{
 
 ipcMain.handle('update-note',  async (_,newNote)=>{
     await jsonToolInMain.updateNoteJson(newNote);
+})
+
+ipcMain.handle('save-txt-file', async (_,title,content) => {
+    const { canceled, filePath } = await dialog.showSaveDialog(win, {
+        title: '保存文件',
+        defaultPath: `${title}`,
+        filters: [
+            { name: '文本文档', extensions: ['txt'] },
+            { name: '所有文件', extensions: ['*'] }
+        ]
+    });
+
+    if (canceled || !filePath) {
+        return null;
+    }
+    try {
+        await fs.promises.writeFile(filePath, content, 'utf8');
+        return filePath;
+    }
+    catch (error){
+        console.error(error);
+    }
 })

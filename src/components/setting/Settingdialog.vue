@@ -1,41 +1,12 @@
 <script setup>
-import {editView, instructionView} from "@/src/js/container.js";
+import {editView, instructionView} from "@/src/js/mainSetting.js";
 import './SettingContain.vue';
 import SettingContain from "@/src/components/setting/SettingContain.vue";
+import {handleNoteTable} from "@/src/js/mainSetting.js";
 import {isCopy} from "@/src/js/handleSetting.js";
-import {notesFromDb} from "@/src/js/homeHandle.js";
-import {showCreateInfo} from "@/src/js/getTimeAndDate.js";
-import {setBriefContent} from "@/src/js/tool.js";
-import {ElMessage} from "element-plus";
-import {ElMessageConfig} from "@/src/setTypes/messageType.js";
-import {computed, ref} from "vue";
 
-// 获取数据
-const baseData = notesFromDb.value.map(item => ({
-  ...item,
-  createAt: showCreateInfo(item),
-  content:  setBriefContent(item, 20)
-}))
+const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTable();
 
-//复制内容
-function getAndCopyContent(index){
-  let toCopyObject = notesFromDb.value[index];
-  try {
-    if(toCopyObject.content){
-      const content = toCopyObject.content;
-      navigator.clipboard.writeText(content);
-      ElMessage(ElMessageConfig.buildConfig("success",`复制成功`,false,1000))
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-// 搜索栏
-const searchTitle = ref("");
-const filterData = computed(() => baseData.filter(
-    (item) => !searchTitle.value || item.title.toLowerCase().includes(searchTitle.value.toString().toLowerCase())
-))
 </script>
 
 <template>
@@ -51,6 +22,9 @@ const filterData = computed(() => baseData.filter(
     </div>
     <div class="divideLine"></div>
     <div class="instructionContent">
+      <span>
+        点击<button>浏览</button>可选择内容复制或导出为txt文件
+      </span><br>
       <span>
         点击<button>复制</button>可将文件数据复制到剪贴板
       </span>
@@ -105,8 +79,11 @@ const filterData = computed(() => baseData.filter(
           </template>
           <template #default="scope">
             <div class="tableBtn" style="display: flex; justify-content: flex-end;">
-              <el-button type="default" size="default" @click="getAndCopyContent(scope.$index)">
-                复制内容
+              <el-button type="default" size="default" @click="getOutputContent(scope.$index)">
+                导出
+              </el-button>
+              <el-button type="primary" size="default" @click="getAndCopyContent(scope.$index)">
+                复制
               </el-button>
             </div>
           </template>
@@ -154,6 +131,7 @@ const filterData = computed(() => baseData.filter(
 
 .instructionContent{
   margin: 1.5em .5em .5em .5em;
+
 
   & button{
     margin: 0 .5em;

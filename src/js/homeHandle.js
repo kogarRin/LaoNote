@@ -51,10 +51,11 @@ export async function getNotesData(){
     // notesFromDb.value : Object[]
 }
 
-//新建函数
+//新建
 export async function addOneNote() {
     try {
         const curNotes = [...notesFromDb.value];
+        console.log(curNotes)
         if (curNotes.length === 0){
             await window.electronAPI.addNotes();
             ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
