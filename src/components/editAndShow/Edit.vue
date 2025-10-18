@@ -1,6 +1,6 @@
 <script setup>
 import {onBeforeRouteLeave, useRoute,useRouter} from "vue-router";
-import {notesFromDb, updateNote} from "@/src/js/homeHandle.js";
+import {notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
 import {ref, toRaw} from "vue";
 import {ElMessageBox} from "element-plus";
 import {Back} from "@element-plus/icons-vue";
@@ -123,56 +123,5 @@ onBeforeRouteLeave((to, from, next) => {
 </div>
 </template>
 
-<style scoped lang="scss">
-.inputTitle{
-  display: flex;
-  justify-content: space-between;
-
-  & span{
-    text-align: left;
-  }
-
-  .buttonDiv{
-    display: flex;
-    align-items: end;
-  }
-}
-
-.editContainer {
-  width: 100%;
-  padding: 1em;
-
-
-  h4{
-    margin: 0;
-    text-align: left;
-    color: dimgrey;
-  }
-
-  h1{
-    margin: 0;
-    text-align: left;
-  }
-
-  .inputTitleDiv{
-    display:flex;
-    padding: 1em 0;
-  }
-
-  .crossLine{
-    margin: .5em;
-  }
-
-  .mainEditor{
-    height: calc(70vh - 100px);
-
-    .commonEditor{
-      height: 90%;
-      margin: 1em 0 1em 0;
-      overflow: auto;
-    }
-
-  }
-
-}
+<style scoped lang="scss" src="./Edit.scss">
 </style>

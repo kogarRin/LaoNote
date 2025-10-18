@@ -1,5 +1,5 @@
 import {ref} from "vue";
-import {getNotesData, notesFromDb} from "@/src/js/homeHandle.js";
+import {notesFromDb} from "@/src/js/home/homeHandle.js";
 
 export const isCopy = ref(false);
 export const buildAllJsonStructure = () => {

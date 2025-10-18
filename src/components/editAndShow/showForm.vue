@@ -1,5 +1,5 @@
 <script setup>
-import {notesFromDb} from "@/src/js/homeHandle.js";
+import {notesFromDb} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
 import {Back} from "@element-plus/icons-vue";
 
@@ -64,34 +64,5 @@ function toEdit(){
 </div>
 </template>
 
-<style scoped lang="scss">
-.mainContainer {
-  width: 100%;
-  padding: 1em;
-
-  .headerForm {
-    padding-left: 1em;
-    display: flex;
-    justify-content: space-between;
-
-
-    .title {
-      margin: 0;
-      height: 20px;
-      text-align: left;
-    }
-  }
-
-  .contentForm {
-    height: calc(85vh - 100px);
-    text-align: left;
-
-    p{
-      margin: .5em 1em .5em 1em;
-      height: 100%;
-      white-space: pre-wrap;
-      text-indent: 2em;
-    }
-  }
-}
+<style scoped lang="scss" src="./showForm.scss">
 </style>

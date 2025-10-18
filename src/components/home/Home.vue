@@ -10,8 +10,8 @@ import {
   deleteConfirm,
   initNotes,
   refresh,
-  noticeListenerDelete, notesFromDb
-} from "@/src/js/homeHandle.js";
+  noticeListenerDelete
+} from "@/src/js/home/homeHandle.js";
 import NoteList from "@/src/components/home/noteList.vue";
 
 
@@ -82,77 +82,5 @@ onMounted( async () => {
 
 </template>
 
-<style scoped lang="scss">
-.noticesTitle{
-  display: flex;
-  margin: 0 0 0 .5em;
-
-  & h2{
-    margin: 0;
-  }
-}
-
-.divideLine{
-  margin: .5em;
-  border: solid 1px #d3cfcf;
-}
-
-.createNotices{
-  display: flex;
-  margin: 0 0 1em .5em;
-}
-
-.createNoticesButton{
-  display: flex;
-  flex-direction: row-reverse;
-  margin: 0 1em .5em 0;
-
-  & button{
-    margin-right: .5em;
-  }
-}
-
-.mainContentContain {
-  padding: 1em;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 70px);
-
-  .headerContain{
-    margin: 0 0 1em 0;
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .headerTitle{
-        margin-left: .6em;
-      }
-
-      .headerButton{
-        display: flex;
-        align-items: center;
-        gap: .5em;
-        margin-right: .6em;
-
-         .item{
-
-           #refreshIcon{
-             font-size: 1.5em;
-
-           }
-        }
-
-      }
-    }
-
-    .insideContent {
-      display: flex;
-    }
-
-  }
-
-}
+<style scoped lang="scss" src="./Home.scss">
 </style>

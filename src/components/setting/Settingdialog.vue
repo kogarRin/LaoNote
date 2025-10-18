@@ -1,9 +1,9 @@
 <script setup>
-import {editView, instructionView} from "@/src/js/mainSetting.js";
+import {editView, instructionView} from "@/src/js/setting/mainSetting.js";
 import './SettingContain.vue';
 import SettingContain from "@/src/components/setting/SettingContain.vue";
-import {handleNoteTable} from "@/src/js/mainSetting.js";
-import {isCopy} from "@/src/js/handleSetting.js";
+import {handleNoteTable} from "@/src/js/setting/mainSetting.js";
+import {isCopy} from "@/src/js/common/copyStyle.js";
 
 const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTable();
 
@@ -18,16 +18,16 @@ const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTa
     center
   >
     <div>
-      <h1 class="instructionTitle"><span>说明</span></h1>
+      <h1 class="instructionTitle">说明</h1>
     </div>
     <div class="divideLine"></div>
     <div class="instructionContent">
-      <span>
+      <p>
         点击<button>浏览</button>可选择内容复制或导出为txt文件
-      </span><br>
-      <span>
+      </p><br>
+      <p>
         点击<button>复制</button>可将文件数据复制到剪贴板
-      </span>
+      </p>
     </div>
     <div class="buttonContain">
       <el-button type="primary" @click="instructionView=false">确定</el-button>
@@ -58,7 +58,7 @@ const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTa
       width="700"
   >
     <div class="instructionTitle">
-      <span>全部记录</span>
+      <h1>全部内容</h1>
     </div>
     <div class="divideLine"></div>
     <div class="noteTable">
@@ -98,68 +98,5 @@ const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTa
 
 </template>
 
-<style lang="scss">
-:root{
-  user-select: none;
-}
-
-.divideLine{
-  margin: .5em .5em 1em .5em;
-  width: 100%;
-  translate: -7px;
-  border: solid 1px #d3cfcf;
-}
-
-.instructionTitle{
-  margin: 0;
-
-  & span{
-    margin: .5em;
-    color: #1e1d1d;
-    font-size: 1.5em;
-
-    & strong{
-      background-color: #837f7f;
-    }
-  }
-
-  .tableBtn{
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-
-.instructionContent{
-  margin: 1.5em .5em .5em .5em;
-
-
-  & button{
-    margin: 0 .5em;
-  }
-  & span{
-    color: #1e1d1d;
-    font-size: 1.4em;
-
-    & strong{
-      margin: 0 .5em;
-    }
-  }
-  & p{
-    font-size: 1.2em;
-  }
-}
-
-.buttonContain{
-  margin: 2em 0 0 0;
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-.contentToCopy{
-  height: fit-content;
-
-  .noteItem{
-    display: flex;
-  }
-}
+<style lang="scss" src="./Setiingdialog.scss">
 </style>

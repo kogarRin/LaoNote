@@ -1,10 +1,11 @@
-import {computed, ref} from "vue";
-import {buildAllJsonStructure} from "@/src/js/handleSetting.js";
+import {computed, ref, watch} from "vue";
+import {buildAllJsonStructure} from "@/src/js/common/copyStyle.js";
 import {ElMessage} from "element-plus";
-import {ElMessageConfig} from "@/src/setTypes/messageType.js";
-import {showCreateInfo} from "@/src/js/getTimeAndDate.js";
-import {setBriefContent} from "@/src/js/tool.js";
-import {notesFromDb} from "@/src/js/homeHandle.js";
+import {ElMessageConfig} from "@/src/js/config/messageType.js";
+import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
+import {setBriefContent} from "@/src/js/common/tool.js";
+import {notesFromDb} from "@/src/js/home/homeHandle.js";
+import {defineStore} from "pinia";
 
 export const instructionView = ref(false);
 export const editView = ref(false);
@@ -60,8 +61,6 @@ export function handleNoteTable(){
             console.log(error);
         }
     }
-
-
 //搜索
     const searchTitle = ref("");
     const filterData = computed(() => baseData.filter(
@@ -75,3 +74,31 @@ export function handleNoteTable(){
         filterData
     }
 }
+
+//深色模式
+export const settingStore = defineStore('setting', () => {
+    const isDark = ref(false)
+
+    async function initTheme() {
+        isDark.value = await window.electronAPI.getTheme('isDark');
+    }
+
+    async function toggleTheme(val) {
+        isDark.value = val
+        await window.electronAPI.setTheme('isDark', isDark.value);
+    }
+
+    watch(isDark, () => {
+        if (isDark.value) {
+            document.getElementById('base').classList.add('dark');
+        } else {
+            document.getElementById('base').classList.remove('dark');
+        }
+    })
+
+    return{
+        isDark,
+        initTheme,
+        toggleTheme
+    }
+});

@@ -1,6 +1,6 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
-import {ElMessageConfig} from "../setTypes/messageType.js";
+import {ElMessageConfig} from "../config/messageType.js";
 
 const isInit = ref(false);
 export const notesFromDb = ref([]);

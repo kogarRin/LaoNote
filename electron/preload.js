@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     deleteNote: (getIdArray) => ipcRenderer.invoke('delete-note', getIdArray),
     updateNote: (newNote) => ipcRenderer.invoke('update-note',newNote),
     outputTxt: (title, content) => ipcRenderer.invoke('save-txt-file',title,content),
+    setTheme: (theme, value) => ipcRenderer.invoke('set-theme',theme,value),
+    getTheme: (theme) => ipcRenderer.invoke('get-theme',theme),
 });
 console.log('preload.js loaded');

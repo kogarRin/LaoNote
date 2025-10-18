@@ -52,17 +52,5 @@ const calenderView = ref(false);
 
 </template>
 
-<style scoped lang="scss">
-.aside{
-  width:fit-content;
-
-}
-
-#menuIcon {
-  -webkit-user-select: none;
-}
-
-.menuContent {
-  -webkit-user-select: none;
-}
+<style scoped src="./Asidemenu.scss">
 </style>

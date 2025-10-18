@@ -1,9 +1,11 @@
 <script setup>
 import {InfoFilled} from "@element-plus/icons-vue";
-import {isCopy} from "@/src/js/handleSetting.js";
-import {instructionView, editView, copyJson} from "@/src/js/mainSetting.js";
+import {isCopy} from "@/src/js/common/copyStyle.js";
+import {instructionView, editView, copyJson, settingStore} from "@/src/js/setting/mainSetting.js";
+import {storeToRefs} from "pinia";
 
-
+const {initTheme, toggleTheme} = settingStore();
+const {isDark} = storeToRefs(settingStore());
 </script>
 
 <template>
@@ -20,7 +22,40 @@ import {instructionView, editView, copyJson} from "@/src/js/mainSetting.js";
             </div>
           </template>
 
-          <div class="itemsContainer">
+          <div class="theme">
+            <div class="item">
+              <div>
+                <span>主题</span>
+              </div>
+            </div>
+            <el-divider />
+
+            <div class="item">
+              <div>
+                <span>深色模式</span>
+              </div>
+              <div class="modeButton">
+                <el-switch
+                  active-text="开启"
+                  inactive-text="关闭"
+                  v-model="isDark"
+                  @change="toggleTheme"
+                />
+              </div>
+            </div>
+          </div>
+
+          <el-divider class="partsDivider" />
+
+          <div class="options">
+            <div class="item">
+              <div>
+                <span>选项</span>
+              </div>
+            </div>
+
+            <el-divider />
+
             <div class="item">
               <div>
                 <span>复制选项</span>
@@ -49,12 +84,25 @@ import {instructionView, editView, copyJson} from "@/src/js/mainSetting.js";
                 </el-tooltip>
               </div>
             </div>
-            <div class="item">
-              <div>
-                <span>编辑</span>
+
+            <el-divider class="partsDivider" />
+
+            <div class="about">
+              <div class="item">
+                <div>
+                  <span>关于</span>
+                </div>
               </div>
-              <div>
-                <el-button type="default" @click="editView=!editView">查看说明</el-button>
+
+              <el-divider />
+
+              <div class="item">
+                <div>
+                  <span>编辑</span>
+                </div>
+                <div>
+                  <el-button type="default" @click="editView=!editView">查看说明</el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -64,42 +112,5 @@ import {instructionView, editView, copyJson} from "@/src/js/mainSetting.js";
   </div>
 </template>
 
-<style scoped lang="scss">
-.settingsContainer{
-  flex-grow: 1;
-  padding: .5em;
-
-    .title {
-      display: flex;
-      justify-content: flex-start;
-
-    }
-
-    .item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: .5em;
-
-      #infoFile {
-        margin: .3em 0 0 .5em;
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-
-      .copyButton {
-        right: 0;
-        display: flex;
-
-
-        .inputDefaultPath {
-          width: 250px;
-        }
-
-      }
-    }
-  }
-
-
+<style scoped lang="scss" src="./SettingContain.scss">
 </style>

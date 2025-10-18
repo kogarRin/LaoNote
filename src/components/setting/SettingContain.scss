@@ -1,0 +1,44 @@
+.settingsContainer {
+  flex-grow: 1;
+  padding: .5em;
+
+  .title {
+    display: flex;
+    justify-content: flex-start;
+
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .5em;
+
+    #infoFile {
+      margin: .3em 0 0 .5em;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .copyButton {
+      right: 0;
+      display: flex;
+
+
+      .inputDefaultPath {
+        width: 250px;
+      }
+
+    }
+  }
+
+  .el-divider--horizontal {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .partsDivider{
+    margin-bottom: 24px;
+  }
+}

@@ -1,7 +1,6 @@
 <script setup>
-import {showCreateInfo} from "@/src/js/getTimeAndDate.js";
-import {isEditorModal, notesFromDb, selectedNoteIDs, showSkeleton} from "@/src/js/homeHandle.js";
-import {ref} from "vue";
+import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
+import {isEditorModal, notesFromDb, selectedNoteIDs, showSkeleton} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
 
 
@@ -71,76 +70,5 @@ function toShowForm(eachNoteId){
   </div>
 </template>
 
-<style scoped lang="scss">
-.showContainer{
-  position: relative;
-  height: 80%;
-  border-radius: .5em;
-
-  .skeleton{
-    padding: 1em 0 0 .5em;
-    position: absolute;
-    width: 94%;
-    left: 1%;
-
-    #skeLine{
-      display: grid;
-      grid-template-columns: 1fr;
-      margin-bottom: 1em;
-    }
-  }
-
-  .emptyContainer{
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-  }
-
-  .contentsList{
-    display: flex;
-
-    .noteContainer{
-      width: 100%;
-
-      .noteInfoContain{
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-        margin: 0 .6em 1em .6em;
-        border: solid rgba(109, 127, 145, 0.45) 2px;
-        border-radius: .2em;
-
-        &:hover{
-          box-shadow: 0 0 10px rgba(149, 183, 209, 0.68);
-          cursor: pointer;
-        }
-
-        .contentTitle{
-          margin: .8em .8em 0 .8em;
-          user-select: none;
-
-        }
-
-        .noteContent{
-          display: flex;
-          margin: 0 .8em 0 .8em;
-          user-select: none;
-        }
-
-        .detailInfo{
-          display: flex;
-          margin: .5em .8em .5em .8em;
-
-          div{
-            margin: 0 .5em 0 0;
-          }
-        }
-      }
-
-    }
-  }
-}
+<style scoped lang="scss" src="./noteList.scss">
 </style>

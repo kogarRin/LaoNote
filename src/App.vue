@@ -1,13 +1,16 @@
 <script setup>
 import Header from "@/src/components/basicViews/Header.vue";
 import Asidemenu from "@/src/components/basicViews/Asidemenu.vue";
+import {settingStore} from "@/src/js/setting/mainSetting.js";
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 const router = useRouter();
+const {initTheme} = settingStore();
 onMounted(() => {
   if(router.currentRoute.value.path === "/") {
     router.push("/");
   }
+  initTheme();
 });
 </script>
 

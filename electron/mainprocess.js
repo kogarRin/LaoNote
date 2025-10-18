@@ -1,6 +1,7 @@
-import { app, BrowserWindow, ipcMain,dialog} from 'electron';
+import { app, BrowserWindow, ipcMain ,dialog} from 'electron';
 import {fileURLToPath} from 'url';
 import {mkdir} from 'fs/promises';
+import Store from 'electron-store';
 import path from 'path';
 import jsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
 import * as fs from "node:fs";
@@ -11,6 +12,7 @@ const __dirname = path.dirname(__filename);
 const jsonToolInMain = new jsonDbToolClass();
 const dbFile = getDataDir();          // 第一次算路径
 mkdir(path.dirname(dbFile), { recursive: true }).catch(() => {});
+const store = new Store()
 
 
 function createWindow() {
@@ -94,4 +96,13 @@ ipcMain.handle('save-txt-file', async (_,title,content) => {
     catch (error){
         console.error(error);
     }
+})
+
+ipcMain.handle('set-theme', async (_, theme, value) =>{
+    store.set(theme, value);
+    console.log(store.get(theme));
+})
+
+ipcMain.handle('get-theme', async (_, theme) => {
+    return store.get(theme);
 })
