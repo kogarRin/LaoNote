@@ -19,7 +19,7 @@ function createWindow() {
     win = new BrowserWindow({
         minWidth: 1000,
         minHeight: 750,
-        icon: path.join(__dirname, '../src/assets/icon.ico'),
+        icon: path.join(__dirname, '../src/assets/icon/icon.ico'),
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -100,9 +100,19 @@ ipcMain.handle('save-txt-file', async (_,title,content) => {
 
 ipcMain.handle('set-theme', async (_, theme, value) =>{
     store.set(theme, value);
-    console.log(store.get(theme));
+    console.log('is dark?:' + store.get(theme));
 })
 
 ipcMain.handle('get-theme', async (_, theme) => {
     return store.get(theme);
+})
+
+ipcMain.handle('set-font', async (_,font) => {
+    store.set('font-key',font);
+    console.log('set font:' + store.get('font-key'));
+})
+
+ipcMain.handle('get-font', async (_) => {
+    console.log( 'get font:' + store.get('font-key'));
+    return store.get('font-key');
 })

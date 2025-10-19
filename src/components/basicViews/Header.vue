@@ -22,7 +22,7 @@ function closeWin(){
   <div class="header">
 
     <div class="leftHeader">
-      <img alt="Flied" class="icon" src="/public/icon/icon.ico"/>
+      <img alt="Flied" class="icon" src="/src/assets/icon/icon.ico"/>
       <div class="appTitle">
         <span>LaoNote</span>
       </div>

@@ -11,5 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     outputTxt: (title, content) => ipcRenderer.invoke('save-txt-file',title,content),
     setTheme: (theme, value) => ipcRenderer.invoke('set-theme',theme,value),
     getTheme: (theme) => ipcRenderer.invoke('get-theme',theme),
+    setFont: (font) => ipcRenderer.invoke('set-font',font),
+    getFont: () => ipcRenderer.invoke('get-font'),
 });
 console.log('preload.js loaded');

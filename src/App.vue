@@ -5,12 +5,13 @@ import {settingStore} from "@/src/js/setting/mainSetting.js";
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 const router = useRouter();
-const {initTheme} = settingStore();
+const {initTheme,initFonts} = settingStore();
 onMounted(() => {
   if(router.currentRoute.value.path === "/") {
     router.push("/");
   }
   initTheme();
+  initFonts();
 });
 </script>
 

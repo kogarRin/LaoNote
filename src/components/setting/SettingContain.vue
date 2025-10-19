@@ -1,11 +1,11 @@
 <script setup>
 import {InfoFilled} from "@element-plus/icons-vue";
-import {isCopy} from "@/src/js/common/copyStyle.js";
+import {isCopy, copyUrl} from "@/src/js/common/copyStyle.js";
 import {instructionView, editView, copyJson, settingStore} from "@/src/js/setting/mainSetting.js";
 import {storeToRefs} from "pinia";
 
-const {initTheme, toggleTheme} = settingStore();
-const {isDark} = storeToRefs(settingStore());
+const {toggleTheme, selectFont} = settingStore();
+const {isDark, fontsList, activeEn} = storeToRefs(settingStore());
 </script>
 
 <template>
@@ -43,6 +43,24 @@ const {isDark} = storeToRefs(settingStore());
                 />
               </div>
             </div>
+
+            <div class="item">
+              <div>
+                <span>选择字体</span>
+              </div>
+              <div>
+                <el-select style="width: 160px;" v-model="activeEn" :model-value="activeEn" @change="selectFont">
+                  <el-option
+                      v-for="font in fontsList"
+                      :key="font.en"
+                      :label="font.name"
+                      :value="font.en"
+                      :style="{ fontFamily: font.family }"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
           </div>
 
           <el-divider class="partsDivider" />
@@ -64,7 +82,7 @@ const {isDark} = storeToRefs(settingStore());
                 </el-tooltip>
               </div>
               <div class="copyButton">
-                <el-tooltip placement="top" effect="dark" content="选择复制的内容">
+                <el-tooltip placement="top" effect="dark" content="选择复制或导出的内容">
                   <el-button
                       type="default"
                       id="copyChooserButton"
@@ -73,7 +91,7 @@ const {isDark} = storeToRefs(settingStore());
                     浏览
                   </el-button>
                 </el-tooltip>
-                <el-tooltip placement="top" effect="dark" content="点击复制 json" >
+                <el-tooltip placement="top" effect="dark" content="点击复制 json">
                   <el-button
                       type="primary"
                       id="copyButton"
@@ -102,6 +120,16 @@ const {isDark} = storeToRefs(settingStore());
                 </div>
                 <div>
                   <el-button type="default" @click="editView=!editView">查看说明</el-button>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <span>仓库</span>
+                </div>
+                <div class="repo" @click="copyUrl">
+                  <el-tooltip placement="top" effect="dark" content="点击复制仓库地址">
+                    <u style="font-size: 14px;">Gitee仓库</u>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
