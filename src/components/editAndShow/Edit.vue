@@ -5,40 +5,47 @@ import {ref, toRaw} from "vue";
 import {ElMessageBox} from "element-plus";
 import {Back} from "@element-plus/icons-vue";
 
+
 const objDate = new Date();
 const router = useRouter();
 const route = useRoute();
 
 //最初从db获取的note，不会改变
-let editNoteObj = toRaw(
-    notesFromDb.value.find(item => item.id === route.params.id)
-)
+let editNoteObj = JSON.parse(JSON.stringify(
+    toRaw(notesFromDb.value.find(item => item.id === route.params.id))
+));
 
 const contentRef = ref(editNoteObj.content);
 const titleRef = ref(editNoteObj.title);
-function sendUpdateNote(){
-  const sendUpdateNote =  toRaw({
+let getNewNote = {};
+function setUpdateNote(){
+  const payload =  toRaw({
     title: titleRef.value,
     content: contentRef.value,
     createAt: editNoteObj.createAt,
     id: editNoteObj.id,
   })
-  return JSON.parse(JSON.stringify(sendUpdateNote))
+  return JSON.parse(JSON.stringify(payload))
 }
 function toShowForm(){
   router.push({name: "showNote"});
 }
 
+async function saveClick(){
+  const payload = setUpdateNote();
+  await updateNote(payload);
+  getNewNote = JSON.parse(JSON.stringify(payload));
+}
+
 onBeforeRouteLeave((to, from, next) => {
-  const currentNote = sendUpdateNote()
+  const currentNote = setUpdateNote()
   //currentNote用于获取当前note，与最初editNoteObj比较
   if (currentNote.content === editNoteObj.content && currentNote.title === editNoteObj.title) {
     return next();
   } else {
-    const getNewNoteDb = toRaw(notesFromDb.value.find(item => item.id === route.params.id))
     //这里currentNote再和getNewDb比较，如果已经保存，newDb会改变
     const isSaved = () => (
-      currentNote.content === getNewNoteDb.content && currentNote.title === getNewNoteDb.title
+      currentNote.content === getNewNote.content && currentNote.title === getNewNote.title
     );
     if (isSaved()) {
       return next();
@@ -47,9 +54,9 @@ onBeforeRouteLeave((to, from, next) => {
         confirmButtonText: '保存',
         cancelButtonText: '取消',
         showClose: false,
-        callback: (action) => {
+        callback: async (action) => {
           if (action === 'confirm') {
-            updateNote(sendUpdateNote());
+            await updateNote(setUpdateNote());
             next();
           } else {
             return next();
@@ -81,7 +88,7 @@ onBeforeRouteLeave((to, from, next) => {
             <el-button text @click="toShowForm">
               <el-icon size="18px"><Back /></el-icon>
             </el-button>
-            <el-button type="primary" @click="updateNote(sendUpdateNote())">保存</el-button>
+            <el-button type="primary" @click="saveClick">保存</el-button>
           </div>
         </div>
       </div>
