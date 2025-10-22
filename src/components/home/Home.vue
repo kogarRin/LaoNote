@@ -1,23 +1,14 @@
 <script setup>
 import {onMounted} from "vue";
-import {Delete, Refresh} from "@element-plus/icons-vue";
-import './noteList.vue';
-import {
-  isEditorModal,
-  addOneNote,
-  selectedNoteIDs,
-  deleteNote,
-  deleteConfirm,
-  initNotes,
-  refresh,
-  noticeListenerDelete
-} from "@/src/js/home/homeHandle.js";
-import NoteList from "@/src/components/home/noteList.vue";
-
+import {Delete, Refresh, Search} from "@element-plus/icons-vue";
+import {searchInputContent, searchedNotes} from "@/src/js/common/tool.js";
+import {isEditorModal, addOneNote, selectedNoteIDs, deleteNote, deleteConfirm, initNotes, refresh, noticeListenerDelete} from "@/src/js/home/homeHandle.js";
+import noteList from "@/src/components/home/noteList.vue";
 
 onMounted( async () => {
   await initNotes();
 });
+
 
 </script>
 
@@ -44,7 +35,22 @@ onMounted( async () => {
         <div class="headerContain">
           <div class="header">
             <div class="headerTitle">
-              <span><b>选择目录以编辑</b></span>
+              <span><b>{{ new Date().getHours() > 12 ? (new Date().getHours() < 18 ? '下午好，一起摸鱼?' : '没睡，帮带个蜜雪?') : '起这么早，帮打个早八' }}</b></span>
+            </div>
+            <div class="searchDiv">
+              <div>
+                <el-input
+                  v-model="searchInputContent"
+                  :prefix-icon="Search"
+                  :disabled="isEditorModal"
+                  size="large"
+                  class="searchInput"
+                  placeholder="输入标题或内容搜索"
+                  @keyup.enter="()=>searchedNotes(searchInputContent)"
+                  style="width: 15em"
+                >
+                </el-input>
+              </div>
             </div>
             <div class="headerButton">
               <div class="item">
@@ -78,6 +84,7 @@ onMounted( async () => {
         </div>
 
         <noteList />
+
   </div>
 
 </template>

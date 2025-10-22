@@ -81,7 +81,7 @@ onBeforeRouteLeave((to, from, next) => {
       <div class="inputTitle">
         <div>
           <h4>{{`${(objDate.getMonth() + 1)}月${objDate.getDate()}日`}}{{objDate.getHours() <= 12 ? '上午' : '下午'}}</h4>
-          <h1>请输入标题</h1>
+          <h1>标题</h1>
         </div>
         <div class="buttonDiv">
           <div>
@@ -95,7 +95,7 @@ onBeforeRouteLeave((to, from, next) => {
       <div class="inputTitleDiv">
         <el-input
             v-model="titleRef"
-            placeholder="请输入文章标题"
+            placeholder="输入标题"
             clearable
         />
       </div>

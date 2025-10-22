@@ -1,6 +1,6 @@
 <script setup>
 import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
-import {isEditorModal, notesFromDb, selectedNoteIDs, showSkeleton} from "@/src/js/home/homeHandle.js";
+import {isEditorModal, notesFromDb, selectedNoteIDs, isLoading} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
 
 
@@ -28,7 +28,7 @@ function toShowForm(eachNoteId){
 
 <template>
   <div class="showContainer">
-    <div style="margin: 1em 0 1em 0;" v-if="!showSkeleton" class="skeleton">
+    <div style="margin: 1em 0 1em 0;" v-if="isLoading" class="skeleton">
       <el-skeleton v-for="i in 3" :key="i" variant="text" :rows="1" id="skeLine" animated/>
     </div>
     <div class="emptyContainer" v-else-if="(!notesFromDb.length)">

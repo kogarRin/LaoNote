@@ -4,20 +4,16 @@ import {ElMessageConfig} from "../config/messageType.js";
 
 const isInit = ref(false);
 export const notesFromDb = ref([]);
-export const noticeListenerCreate = ref(false);
 export const noticeListenerDelete = ref(false);
 export const isEditorModal = ref(false);
 export const selectedNoteIDs = ref([]);
-export const showSkeleton = ref(true);
-
-
+export const isLoading = ref(true);
 
 export async function initNotes(){ //仅用于初始化，多次调用可能会导致弹窗重复
     const setInitNotes = await window.electronAPI.getNotes();
     if (!isInit.value){
         try {
             if (setInitNotes && Array.isArray(setInitNotes)) {
-                showSkeleton.value = !showSkeleton.value;
                 isInit.value = true;
                 const notesCount = setInitNotes.length;
                 setTimeout(() => {
@@ -25,7 +21,7 @@ export async function initNotes(){ //仅用于初始化，多次调用可能会�
                 }, 1300);
                 setTimeout(()=>{
                     notesFromDb.value = setInitNotes;
-                    showSkeleton.value = !showSkeleton.value;
+                    isLoading.value = !isLoading.value;
                 },1500);
             } else {
                 setTimeout(() => {
@@ -132,10 +128,10 @@ export async function updateNote(newNote) {
 //刷新
 export async function refresh(){
     notesFromDb.value = [];
-    showSkeleton.value = !showSkeleton.value;
+    isLoading.value = !isLoading.value;
     setTimeout(async ()=>{
         notesFromDb.value = await window.electronAPI.getNotes();
-        showSkeleton.value = !showSkeleton.value;
+        isLoading.value = !isLoading.value;
     },300);
     if (notesFromDb.value.length === 0 || notesFromDb.value) {
         ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 1000));
