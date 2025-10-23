@@ -3,6 +3,7 @@ import {notesFromDb} from "@/src/js/home/homeHandle.js";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "@/src/js/config/messageType.js";
 
+
 //复制内容展示
 export function setBriefContent(dataObject, contentStringLength) {
     return dataObject.content && dataObject.content.trim().length > contentStringLength ?
@@ -12,18 +13,19 @@ export function setBriefContent(dataObject, contentStringLength) {
 
 //搜索
 export const searchInputContent = ref('');
+export const searchResult = ref([]);
 export function searchedNotes(tokensOrContent){
-    let getNotes = [...notesFromDb.value];
     try {
-        if (getNotes.length > 0) {
-
-            const searchResult = getNotes.filter(note => (
-                note.title.includes(tokensOrContent) || note.content.includes(tokensOrContent)
-            ));
-            console.log(searchResult)
-            return {searchResult};
+        if (!tokensOrContent || tokensOrContent.trim() === '' || tokensOrContent.trim() === 'undefined') {
+            searchResult.value = [...notesFromDb.value];
+        } else {
+            let lowerQuery = tokensOrContent.trim().toLowerCase();
+            searchResult.value = notesFromDb.value.filter(
+                (item) => (
+                    item.title.toLowerCase().includes(lowerQuery) || item.content.toLowerCase().includes(lowerQuery)
+                )
+            );
         }
-        return getNotes;
     } catch (error) {
         ElMessage(ElMessageConfig.buildConfig('error', error.message, true, 1500));
         return [];

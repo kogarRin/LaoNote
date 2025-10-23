@@ -1,8 +1,8 @@
 <script setup>
 import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
-import {isEditorModal, notesFromDb, selectedNoteIDs, isLoading} from "@/src/js/home/homeHandle.js";
+import {isEditorModal, selectedNoteIDs, isLoading} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
-
+import {searchResult} from "@/src/js/common/tool.js";
 
 const router = useRouter();
 
@@ -29,15 +29,15 @@ function toShowForm(eachNoteId){
 <template>
   <div class="showContainer">
     <div style="margin: 1em 0 1em 0;" v-if="isLoading" class="skeleton">
-      <el-skeleton v-for="i in 3" :key="i" variant="text" :rows="1" id="skeLine" animated/>
+      <el-skeleton v-for="i in Math.ceil(400 / 68)" :key="i" variant="text" :rows="1" id="skeLine" animated/>
     </div>
-    <div class="emptyContainer" v-else-if="(!notesFromDb.length)">
+    <div class="emptyContainer" v-else-if="(!searchResult.length)">
       <img src="/src/assets/nodata.png" alt="No Data"/>
       <span>暂无数据</span>
     </div>
     <el-scrollbar>
       <ul style="padding: 0">
-        <li style="list-style-type: none;" v-for="eachNote in notesFromDb" :key="eachNote.id" class="contentsList">
+        <li style="list-style-type: none;" v-for="eachNote in searchResult" :key="eachNote.id" class="contentsList">
           <input v-if="isEditorModal" type="checkbox" :value="eachNote.id" v-model="selectedNoteIDs">
           <div class="noteContainer" @click="toShowForm(eachNote.id)">
             <div class="noteInfoContain">

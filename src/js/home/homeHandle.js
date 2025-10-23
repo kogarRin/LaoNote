@@ -1,6 +1,7 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "../config/messageType.js";
+import {searchResult} from "@/src/js/common/tool.js";
 
 const isInit = ref(false);
 export const notesFromDb = ref([]);
@@ -21,6 +22,7 @@ export async function initNotes(){ //仅用于初始化，多次调用可能会�
                 }, 1300);
                 setTimeout(()=>{
                     notesFromDb.value = setInitNotes;
+                    searchResult.value = [...notesFromDb.value];
                     isLoading.value = !isLoading.value;
                 },1500);
             } else {

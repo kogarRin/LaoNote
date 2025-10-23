@@ -2,14 +2,24 @@
 import {onMounted} from "vue";
 import {Delete, Refresh, Search} from "@element-plus/icons-vue";
 import {searchInputContent, searchedNotes} from "@/src/js/common/tool.js";
-import {isEditorModal, addOneNote, selectedNoteIDs, deleteNote, deleteConfirm, initNotes, refresh, noticeListenerDelete} from "@/src/js/home/homeHandle.js";
+import {
+  isEditorModal,
+  addOneNote,
+  selectedNoteIDs,
+  deleteNote,
+  deleteConfirm,
+  initNotes,
+  refresh,
+  noticeListenerDelete,
+  notesFromDb
+} from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
 
 onMounted( async () => {
   await initNotes();
 });
 
-
+console.log(notesFromDb.value)
 </script>
 
 <template>
@@ -26,7 +36,7 @@ onMounted( async () => {
       <span>确定删除选择的{{selectedNoteIDs.length}}条记录？</span>
     </div>
     <div class="createNoticesButton">
-      <el-button type="default"  @click="()=>noticeListenerDelete=!noticeListenerDelete">取消</el-button>
+      <el-button type="default"  @click="()=>{noticeListenerDelete=!noticeListenerDelete}">取消</el-button>
       <el-button type="primary"  @click="deleteConfirm">确定</el-button>
     </div>
   </el-dialog>
@@ -45,10 +55,18 @@ onMounted( async () => {
                   :disabled="isEditorModal"
                   size="large"
                   class="searchInput"
-                  placeholder="输入标题或内容搜索"
+                  placeholder="输入标题或内容"
                   @keyup.enter="()=>searchedNotes(searchInputContent)"
-                  style="width: 15em"
+                  style="width: 100%"
                 >
+                  <template #append>
+                    <el-button
+                      @click="()=>searchedNotes(searchInputContent)"
+                      size="small"
+                    >
+                      搜索
+                    </el-button>
+                  </template>
                 </el-input>
               </div>
             </div>
