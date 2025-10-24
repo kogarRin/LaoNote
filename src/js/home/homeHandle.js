@@ -129,13 +129,16 @@ export async function updateNote(newNote) {
 
 //刷新
 export async function refresh(){
-    notesFromDb.value = [];
+    searchResult.value = [];
     isLoading.value = !isLoading.value;
     setTimeout(async ()=>{
-        notesFromDb.value = await window.electronAPI.getNotes();
-        isLoading.value = !isLoading.value;
-    },300);
-    if (notesFromDb.value.length === 0 || notesFromDb.value) {
-        ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 1000));
+        ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 800));
+    },500);
+    if (searchResult.value.length !== 0 || searchResult.value) {
+        setTimeout(async ()=>{
+            notesFromDb.value = await window.electronAPI.getNotes();
+            searchResult.value = [...notesFromDb.value];
+            isLoading.value = !isLoading.value;
+        },500)
     }
 }

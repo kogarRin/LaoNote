@@ -3,6 +3,8 @@ import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
 import {isEditorModal, selectedNoteIDs, isLoading} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
 import {searchResult} from "@/src/js/common/tool.js";
+import {playShowAni} from "@/src/js/common/cssTransition.js";
+import {watch} from "vue";
 
 const router = useRouter();
 
@@ -24,6 +26,7 @@ function toShowForm(eachNoteId){
     });
   }
 }
+watch(searchResult, () => playShowAni(), {flush: 'post'});
 </script>
 
 <template>

@@ -13,9 +13,11 @@ import {
   noticeListenerDelete
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
+import {playShowAni} from "@/src/js/common/cssTransition.js";
 
 onMounted( async () => {
   await initNotes();
+  playShowAni();
 });
 
 </script>
