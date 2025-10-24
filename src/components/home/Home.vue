@@ -10,8 +10,7 @@ import {
   deleteConfirm,
   initNotes,
   refresh,
-  noticeListenerDelete,
-  notesFromDb
+  noticeListenerDelete
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
 
@@ -19,7 +18,6 @@ onMounted( async () => {
   await initNotes();
 });
 
-console.log(notesFromDb.value)
 </script>
 
 <template>
