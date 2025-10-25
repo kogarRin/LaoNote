@@ -58,12 +58,14 @@ export async function addOneNote() {
             await window.electronAPI.addNotes();
             ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
             notesFromDb.value = await getNotesData();
+            searchResult.value = [...notesFromDb.value];
             return null;
         }
         if ((curNotes.reverse()[0].content && curNotes.reverse()[0].content.trim() !== "")) {
             await window.electronAPI.addNotes();
             ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
             notesFromDb.value = await getNotesData();
+            searchResult.value = [...notesFromDb.value];
             return null;
         } else {
             ElMessage(ElMessageConfig.buildConfig("error", "性能较弱，请先编辑空白记录哦~~", true, 1500))
@@ -103,6 +105,10 @@ export async function deleteConfirm () {
         selectedNoteIDs.value = [];
         ElMessage(ElMessageConfig.buildConfig("success", "删除记录成功！", true, 1000));
         notesFromDb.value = await getNotesData();
+        searchResult.value = [...notesFromDb.value];
+        if (searchResult.value.length === 0) {
+            isEditorModal.value = false;
+        }
         return null;
     } catch (error) {
         console.error(error);
