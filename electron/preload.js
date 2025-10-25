@@ -6,7 +6,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeWindow: () => ipcRenderer.invoke('close-window'),
     getNotes: () => ipcRenderer.invoke('get-notes'), //获取记录唯一接口，返回Object[]
     addNotes: () => ipcRenderer.invoke('add-note'),
+    updateTags: (noteId,tags) => ipcRenderer.invoke('update-tags', noteId, tags),
     deleteNote: (getIdArray) => ipcRenderer.invoke('delete-note', getIdArray),
+    deleteTags: (noteId,tag) => ipcRenderer.invoke('delete-tags', noteId,tag),
     updateNote: (newNote) => ipcRenderer.invoke('update-note',newNote),
     outputTxt: (title, content) => ipcRenderer.invoke('save-txt-file',title,content),
     setTheme: (theme, value) => ipcRenderer.invoke('set-theme',theme,value),

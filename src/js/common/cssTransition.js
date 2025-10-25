@@ -7,5 +7,5 @@ export function playShowAni() {
             row.classList.remove('show')          // 先清掉
             setTimeout(() => row.classList.add('show'), i * 80) // 微延迟再加
         })
-    })
+    }).then(() => {})
 }

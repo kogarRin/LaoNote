@@ -39,13 +39,14 @@ export default class jsonDbToolClass {
         }
     }
 
+    //增
     async addNoteJson(){ //直接添加逻辑
         const emptyNoteType = ()=> ({
             "title": "无标题",
             "content": "",
             "createAt": new Date(),
             "id": this.#setIdPrototype(),
-            "tags": [],
+            "tags": ['test tag1', 'test tag2'],
         })
         try {
             this.#jsonDb.read();
@@ -57,6 +58,7 @@ export default class jsonDbToolClass {
         }
     }
 
+    //删
     async deleteNoteJson(idArray){
         this.#jsonDb.read();
         if (Array.isArray(idArray) || idArray.length !== 0) {
@@ -65,7 +67,22 @@ export default class jsonDbToolClass {
         }
         return null;
     }
+    deleteTags(noteId, tag){
+        this.#jsonDb.read();
+        const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
+        try {
+                this.#jsonDb.update(({notes})=>{
+                if (!notes[noteIndexForUpdate] || !Array.isArray(notes[noteIndexForUpdate].tags)){
+                    return null;
+                }
+                lodash.pull(notes[noteIndexForUpdate].tags, tag);
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
+    //改
     async updateNoteJson(newNote){
         this.#jsonDb.read();
         const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === newNote.id)
@@ -81,6 +98,27 @@ export default class jsonDbToolClass {
         } catch (error) {
             console.error(error);
             return null;
+        }
+    }
+    async updateTags(noteId, tag){
+        this.#jsonDb.read();
+        const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
+        try {
+            if (noteIndexForUpdate === -1) {
+                return null;
+            }
+            this.#jsonDb.update(({notes})=>{
+                const target = notes[noteIndexForUpdate];
+                if (!target){
+                    return null;
+                }
+                if (!Array.isArray(target.tags)) {
+                    target.tags = [];
+                }
+                target.tags.push(tag);
+            })
+        } catch (error) {
+            console.error(error);
         }
     }
 }

@@ -30,7 +30,7 @@
 
   .inputTitleDiv{
     display:flex;
-    padding: 1em 0;
+    padding: .5em 0;
   }
 
   .crossLine{
@@ -39,6 +39,17 @@
 
   .mainEditor{
     height: calc(70vh - 100px);
+
+    .headerDiv{
+      display: flex;
+      gap: 10px;
+
+      .tagsDiv{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
 
     .commonEditor{
       height: 90%;

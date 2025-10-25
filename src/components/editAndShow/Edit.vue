@@ -1,71 +1,17 @@
 <script setup>
-import {onBeforeRouteLeave, useRoute,useRouter} from "vue-router";
-import {notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
-import {ref, toRaw} from "vue";
-import {ElMessageBox} from "element-plus";
+import {useRoute,useRouter} from "vue-router";
 import {Back} from "@element-plus/icons-vue";
-
+import {useEditNote} from "@/src/js/edit/editHandle.js";
 
 const objDate = new Date();
 const router = useRouter();
 const route = useRoute();
+const {contentRef, titleRef, tagsRef, saveClick, setRouteGuard, updateTags, cancelSetTag, deleteTags, inputValue, inputVisible} = useEditNote(route);
 
-//最初从db获取的note，不会改变
-let editNoteObj = JSON.parse(JSON.stringify(
-    toRaw(notesFromDb.value.find(item => item.id === route.params.id))
-));
-
-const contentRef = ref(editNoteObj.content);
-const titleRef = ref(editNoteObj.title);
-let getNewNote = {};
-function setUpdateNote(){
-  const payload =  toRaw({
-    title: titleRef.value,
-    content: contentRef.value,
-    createAt: editNoteObj.createAt,
-    id: editNoteObj.id,
-  })
-  return JSON.parse(JSON.stringify(payload))
-}
-function toShowForm(){
-  router.push({name: "showNote"});
-}
-
-async function saveClick(){
-  const payload = setUpdateNote();
-  await updateNote(payload);
-  getNewNote = JSON.parse(JSON.stringify(payload));
-}
-
-onBeforeRouteLeave((to, from, next) => {
-  const currentNote = setUpdateNote()
-  //currentNote用于获取当前note，与最初editNoteObj比较
-  if (currentNote.content === editNoteObj.content && currentNote.title === editNoteObj.title) {
-    return next();
-  } else {
-    //这里currentNote再和getNewDb比较，如果已经保存，newDb会改变
-    const isSaved = () => (
-      currentNote.content === getNewNote.content && currentNote.title === getNewNote.title
-    );
-    if (isSaved()) {
-      return next();
-    } else {
-      ElMessageBox.confirm('当前内容未保存，是否保存？', '提示',{
-        confirmButtonText: '保存',
-        cancelButtonText: '取消',
-        showClose: false,
-        callback: async (action) => {
-          if (action === 'confirm') {
-            await updateNote(setUpdateNote());
-            next();
-          } else {
-            return next();
-          }
-        }
-      })
-    }
-  }
-});
+// 路由守卫
+setRouteGuard();
+//返回
+const toShowForm = () => router.push({ name: 'showNote' });
 </script>
 
 <template>
@@ -100,11 +46,45 @@ onBeforeRouteLeave((to, from, next) => {
         />
       </div>
 
-      <el-divider class="crossLine"></el-divider>
-
       <div class="mainEditor">
-        <div class="noticeTitle">
-          <h1>正文内容</h1>
+        <div class="headerDiv">
+          <h1>内容</h1>
+          <div class="tagsDiv">
+              <el-tag
+                  v-for="item in tagsRef"
+                  :key="item"
+                  @close="deleteTags(route.params.id, item)"
+                  closable
+              >
+                {{ item }}
+              </el-tag>
+              <el-input
+                v-if="inputVisible"
+                v-model="inputValue"
+                size="small"
+                maxlength="10"
+                show-word-limit
+                style="width: 100px"
+              />
+              <div style=" display: flex; gap: 5px">
+                <el-button
+                    @click="cancelSetTag"
+                    size="small"
+                >
+                  {{ (inputVisible ? 'cancel' : '+ New Tag') }}
+                </el-button>
+                <el-button
+                    v-if="inputVisible"
+                    @click="updateTags(route.params.id, inputValue)"
+                    size="small"
+                    type="primary"
+                    style="margin-left: 0"
+                >
+                  Confirm
+                </el-button>
+              </div>
+
+          </div>
         </div>
         <div class="commonEditor">
           <el-input

@@ -17,7 +17,7 @@ const store = new Store()
 
 function createWindow() {
     win = new BrowserWindow({
-        minWidth: 1000,
+        minWidth: 1200,
         minHeight: 750,
         icon: path.join(__dirname, '../src/assets/icon/icon.ico'),
         frame: false,
@@ -68,8 +68,16 @@ ipcMain.handle('add-note', async () => {
     await jsonToolInMain.addNoteJson();
 })
 
-ipcMain.handle('delete-note',  async (_,toDeleteIdArray)=>{
+ipcMain.handle('update-tags', async (_,noteId, tag) => {
+    await jsonToolInMain.updateTags(noteId, tag);
+})
+
+ipcMain.handle('delete-note', async (_,toDeleteIdArray)=>{
     await jsonToolInMain.deleteNoteJson(toDeleteIdArray);
+})
+
+ipcMain.handle('delete-tags',  (_,noteId, tag) => {
+    jsonToolInMain.deleteTags(noteId, tag);
 })
 
 ipcMain.handle('update-note',  async (_,newNote)=>{
@@ -100,7 +108,6 @@ ipcMain.handle('save-txt-file', async (_,title,content) => {
 
 ipcMain.handle('set-theme', async (_, theme, value) =>{
     store.set(theme, value);
-    console.log('is dark?:' + store.get(theme));
 })
 
 ipcMain.handle('get-theme', async (_, theme) => {
