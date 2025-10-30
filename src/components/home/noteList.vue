@@ -55,6 +55,11 @@ watch(searchResult, () => playShowAni(), {flush: 'post'});
                     {{ eachNote.content? `${eachNote.content.trim().slice(0, 32)}......` : "暂无内容"}}
                   </span>
                 </div>
+                <div>
+                  <el-tag v-for="tag in (eachNote.tags.length > 6 ? eachNote.tags.slice(0, 6) : eachNote.tags )" style="margin: 0 5px;">
+                    {{(eachNote.tags.length < 6 ? tag : tag + '...')}}
+                  </el-tag>
+                </div>
               </div>
               <div class="detailInfo">
                 <div>

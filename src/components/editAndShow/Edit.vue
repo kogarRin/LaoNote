@@ -10,6 +10,7 @@ const {contentRef, titleRef, tagsRef, saveClick, setRouteGuard, updateTags, canc
 
 // 路由守卫
 setRouteGuard();
+
 //返回
 const toShowForm = () => router.push({ name: 'showNote' });
 </script>

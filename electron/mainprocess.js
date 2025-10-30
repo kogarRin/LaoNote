@@ -77,7 +77,7 @@ ipcMain.handle('delete-note', async (_,toDeleteIdArray)=>{
 })
 
 ipcMain.handle('delete-tags',  (_,noteId, tag) => {
-    jsonToolInMain.deleteTags(noteId, tag);
+    jsonToolInMain.deleteTagsInNotes(noteId, tag);
 })
 
 ipcMain.handle('update-note',  async (_,newNote)=>{

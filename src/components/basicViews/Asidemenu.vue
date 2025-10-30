@@ -4,6 +4,7 @@ import {Calendar, CollectionTag, Menu as IconMenu} from '@element-plus/icons-vue
 
 const isCollapsed = ref(true);
 const calenderView = ref(false);
+const tagsView = ref(true);
 </script>
 
 <template>
@@ -25,6 +26,30 @@ const calenderView = ref(false);
     </template>
   </el-dialog>
 
+  <el-dialog
+    v-model="tagsView"
+    :show-close="false"
+    title="管理标签"
+    center
+  >
+    <div class="tagsStoreContainer">
+      <div class="itemTitle">
+        <h4>说明</h4>
+        <p>此处用于存储标签，可以添加常用标签</p>
+      </div>
+      <div class="itemContent">
+        <div class="tagsContainer">
+          <el-table
+
+
+          >
+
+          </el-table>
+        </div>
+      </div>
+    </div>
+  </el-dialog>
+
   <!--菜单-->
   <el-aside class="aside">
     <el-menu
@@ -41,7 +66,7 @@ const calenderView = ref(false);
         </el-icon>
         <span class="menuContent">选择日程</span>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="3" @click="tagsView = !tagsView">
         <el-icon id="menuIcon">
           <el-icon><CollectionTag /></el-icon>
         </el-icon>

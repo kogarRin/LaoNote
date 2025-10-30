@@ -9,3 +9,23 @@
 .menuContent {
   -webkit-user-select: none;
 }
+
+.tagsStoreContainer{
+  .itemTitle{
+    margin-bottom: 10px;
+
+    h4{
+      margin: 0 10px 5px 10px;
+    }
+    p{
+      margin: 0 10px;
+    }
+  }
+
+  .itemContent{
+    height: 40vh;
+    background-color: #212020;
+    padding: 10px;
+
+  }
+}

@@ -20,7 +20,7 @@ export default class jsonDbToolClass {
     constructor() {
         this.#fileBasePath = getDataDir();
         const adapter = new JSONFile(this.#fileBasePath);
-        this.#jsonDb = new Low(adapter, {notes: []});
+        this.#jsonDb = new Low(adapter, {notes: [], tags: []});
     }
 
     #setIdPrototype = () => {
@@ -67,7 +67,7 @@ export default class jsonDbToolClass {
         }
         return null;
     }
-    deleteTags(noteId, tag){
+    deleteTagsInNotes(noteId, tag){
         this.#jsonDb.read();
         const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
         try {

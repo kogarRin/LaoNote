@@ -9,11 +9,7 @@
         "test tag02",
         "test tag04",
         "vue3",
-        "scss",
-        "2222222222",
-        "dddddddddd",
-        "wwwwwwwwww",
-        "pppppppppp"
+        "scss"
       ]
     },
     {
@@ -26,5 +22,9 @@
         "test tag2"
       ]
     }
+  ],
+  "globalTags": [
+    "96359",
+    "1145"
   ]
 }

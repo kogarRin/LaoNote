@@ -76,7 +76,7 @@ export function useEditNote(route){
 
     //删除标签
     function deleteTags(noteId, tag){
-        window.electronAPI.deleteTags(noteId, tag)
+        window.electronAPI.deleteTagsInNotes(noteId, tag)
         tagsRef.value.splice(tagsRef.value.indexOf(tag),1);
         ElMessage(ElMessageConfig.buildConfig('success', '已删除', false, 1000))
     }
