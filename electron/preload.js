@@ -15,5 +15,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getTheme: (theme) => ipcRenderer.invoke('get-theme',theme),
     setFont: (font) => ipcRenderer.invoke('set-font',font),
     getFont: () => ipcRenderer.invoke('get-font'),
+    loadGlobalTags: () => ipcRenderer.invoke('load-global-tags'),
+    addGlobalTag: (tag) => ipcRenderer.invoke('add-global-tags',tag),
+    deleteGlobalTags: (tag) => ipcRenderer.invoke('delete-global-tags',tag),
+    deleteAllGlobalTags: (allGlobalTags) => ipcRenderer.invoke('delete-all-global-tags',allGlobalTags),
 });
+
 console.log('preload.js loaded');

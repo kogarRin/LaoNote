@@ -10,7 +10,7 @@ export const isEditorModal = ref(false);
 export const selectedNoteIDs = ref([]);
 export const isLoading = ref(true);
 
-export async function initNotes(){ //仅用于初始化，多次调用可能会导致弹窗重复
+export async function initNotes(){ //仅用于笔记和全局标签初始化，多次调用可能会导致弹窗重复
     const setInitNotes = await window.electronAPI.getNotes();
     if (!isInit.value){
         try {
@@ -93,7 +93,7 @@ export async function deleteNote() {
         return null;
     }
 }
-export async function deleteConfirm () {
+export async function deleteConfirm() {
     try {
         const deleteIdArray = [...selectedNoteIDs.value];
         await window.electronAPI.deleteNote(deleteIdArray);

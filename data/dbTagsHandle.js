@@ -14,10 +14,9 @@ export const getDataDir = () => {
     return isDev ? path.join(__dirname, 'db.json') : path.join(app.getPath('userData'),'data','db.json')
 };
 
-export class globalTagsDbTool{
+export default class GlobalTagsDbToolClass {
     #globalTagsFilePath
     #globalTagsDb
-
 
     constructor() {
         this.#globalTagsFilePath = getDataDir();
@@ -37,10 +36,10 @@ export class globalTagsDbTool{
     }
 
      //增加globalTags
-     async addGlobalTags(globalTags){
+     async addGlobalTags(Tag){
         try {
             await this.#globalTagsDb.read();
-            this.#globalTagsDb.data.globalTags.push(globalTags);
+            this.#globalTagsDb.data.globalTags.push(Tag);
             this.#globalTagsDb.write();
         } catch (error) {
             console.error(error);
@@ -60,6 +59,19 @@ export class globalTagsDbTool{
                 }
                 return null;
             })
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    //删除所有globalTags
+    async deleteAllGlobalTags(allGlobalTags){
+        try{
+            await this.#globalTagsDb.read();
+            this.#globalTagsDb.update(({globalTags})=>{
+                lodash.pull(globalTags, allGlobalTags);
+            });
         } catch (error) {
             console.error(error);
             return null;

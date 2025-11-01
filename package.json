@@ -4,7 +4,7 @@
   "description": "LaoNote编辑器",
   "author": "Kogar",
   "type": "module",
-  "main": "electron/mainprocess.js",
+  "main": "electron/mainProcess.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron .",
     "serve": "vite",

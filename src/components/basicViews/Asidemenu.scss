@@ -10,22 +10,45 @@
   -webkit-user-select: none;
 }
 
+
 .tagsStoreContainer{
   .itemTitle{
     margin-bottom: 10px;
+
 
     h4{
       margin: 0 10px 5px 10px;
     }
     p{
       margin: 0 10px;
+      text-align: center;
+    }
+
+    .down{
+      display: flex;
+      justify-content: space-between;
     }
   }
 
   .itemContent{
-    height: 40vh;
+    min-height: 20vh;
+    max-height: 40vh;
     background-color: #212020;
     padding: 10px;
+    overflow-y: scroll;
 
+    .tagsContainer{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
   }
+}
+
+.tagInputContainer{
+  display: flex;
+
+  gap: 10px;
+  margin-bottom: 10px;
+
 }

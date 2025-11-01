@@ -3,17 +3,19 @@ import {fileURLToPath} from 'url';
 import {mkdir} from 'fs/promises';
 import Store from 'electron-store';
 import path from 'path';
-import jsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
+import JsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
 import * as fs from "node:fs";
+import GlobalTagsDbToolClass from "../data/dbTagsHandle.js";
 
 let win;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const jsonToolInMain = new jsonDbToolClass();
+const jsonToolInMain = new JsonDbToolClass();
+const globalTagsTool = new GlobalTagsDbToolClass();
+
 const dbFile = getDataDir();          // 第一次算路径
 mkdir(path.dirname(dbFile), { recursive: true }).catch(() => {});
 const store = new Store()
-
 
 function createWindow() {
     win = new BrowserWindow({
@@ -46,7 +48,6 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
-
 
 ipcMain.handle('mini-window',  () => {
     win.minimize();
@@ -93,7 +94,6 @@ ipcMain.handle('save-txt-file', async (_,title,content) => {
             { name: '所有文件', extensions: ['*'] }
         ]
     });
-
     if (canceled || !filePath) {
         return null;
     }
@@ -122,4 +122,20 @@ ipcMain.handle('set-font', async (_,font) => {
 ipcMain.handle('get-font', async (_) => {
     console.log( 'get font:' + store.get('font-key'));
     return store.get('font-key');
+})
+
+ipcMain.handle('load-global-tags', async (_) => {
+    return await globalTagsTool.loadGlobalTags();
+})
+
+ipcMain.handle('add-global-tags', async (_,tag) => {
+    await globalTagsTool.addGlobalTags(tag);
+})
+
+ipcMain.handle('delete-global-tags', async (_,toDeleteGlobalTag) => {
+    await globalTagsTool.deleteGlobalTags(toDeleteGlobalTag);
+});
+
+ipcMain.handle('delete-all-global-tags', async (_,allGlobalTags) => {
+    await globalTagsTool.deleteAllGlobalTags(allGlobalTags);
 })

@@ -1,10 +1,15 @@
 <script setup lang="js">
 import {ref} from 'vue';
 import {Calendar, CollectionTag, Menu as IconMenu} from '@element-plus/icons-vue'
+import {addGlobalTags, globalTagsList, removeGlobalTag} from "@/src/js/common/globalTags.js";
+
 
 const isCollapsed = ref(true);
 const calenderView = ref(false);
-const tagsView = ref(true);
+const tagsView = ref(false);
+const tagInputView = ref(false);
+const inputTag = ref("");
+
 </script>
 
 <template>
@@ -26,27 +31,72 @@ const tagsView = ref(true);
     </template>
   </el-dialog>
 
+  <!--标签框-->
   <el-dialog
     v-model="tagsView"
     :show-close="false"
     title="管理标签"
+    style="min-width: 60%;"
     center
   >
     <div class="tagsStoreContainer">
       <div class="itemTitle">
-        <h4>说明</h4>
-        <p>此处用于存储标签，可以添加常用标签</p>
+        <div>
+          <h4>说明</h4>
+          <div class="down">
+            <p>此处用于存储标签，可以添加常用标签</p>
+            <div>
+              <el-button
+                  size="small"
+                  type="default"
+                  style="color: rgb(216,41,41)"
+              >
+                Delete All
+              </el-button>
+              <el-button
+                  type="primary"
+                  size="small"
+                  @click="tagInputView = !tagInputView"
+              >
+                add
+              </el-button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="itemContent">
         <div class="tagsContainer">
-          <el-table
-
-
+          <el-tag
+              v-for="tag in globalTagsList"
+              @close="removeGlobalTag(tag)"
+              closable
           >
-
-          </el-table>
+            {{tag}}
+          </el-tag>
         </div>
       </div>
+    </div>
+  </el-dialog>
+
+  <!--标签输入-->
+  <el-dialog
+    v-model="tagInputView"
+    :show-close="false"
+  >
+    <div class="tagInputContainer">
+      <el-input
+          v-model="inputTag"
+          placeholder="输入标签名称"
+          show-word-limit
+          maxlength="10"
+      />
+      <el-button
+          type="primary"
+          size="default"
+          @click="()=>{addGlobalTags(inputTag);inputTag='';tagInputView=false}"
+      >
+        添加
+      </el-button>
     </div>
   </el-dialog>
 
