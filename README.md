@@ -33,13 +33,13 @@
 
 ### 构建与打包
 
-- 构建生产版本：
+- 打包资源：
   ```bash
-  npm run build
+  npm run dist
   ```
 - 打包为桌面应用（需安装 electron-builder）：
   ```bash
-  npm run electron:build
+  npm run build
   ```
 
 
