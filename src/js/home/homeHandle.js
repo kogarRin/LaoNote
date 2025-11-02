@@ -1,7 +1,8 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "../config/messageType.js";
-import {searchResult} from "@/src/js/common/tool.js";
+import {searchResult} from "@/src/js/common/use/tool.js";
+import {emptyNoteObj} from "@/src/js/common/style/noteStyle.js";
 
 const isInit = ref(false);
 export const notesFromDb = ref([]); //Object[]
@@ -61,7 +62,7 @@ export async function addOneNote() {
         if ((curNotes.reverse()[0].content && curNotes.reverse()[0].content.trim() !== "")) {
             await window.electronAPI.addNotes();
             ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
-            notesFromDb.value = await getNotesData();
+            notesFromDb.value.push(emptyNoteObj);
             searchResult.value = [...notesFromDb.value];
             return null;
         } else {
@@ -74,7 +75,6 @@ export async function addOneNote() {
         return null;
     }
 }
-
 
 //删除部分
 export async function deleteNote() {
@@ -93,15 +93,15 @@ export async function deleteNote() {
         return null;
     }
 }
+
 export async function deleteConfirm() {
     try {
         const deleteIdArray = [...selectedNoteIDs.value];
         await window.electronAPI.deleteNote(deleteIdArray);
         noticeListenerDelete.value = !noticeListenerDelete.value;
-        selectedNoteIDs.value = [];
         ElMessage(ElMessageConfig.buildConfig("success", "删除记录成功！", true, 1000));
-        notesFromDb.value = await getNotesData();
-        searchResult.value = [...notesFromDb.value];
+        searchResult.value = [...notesFromDb.value.filter(note => !deleteIdArray.includes(note.id))];
+        selectedNoteIDs.value = [];
         if (searchResult.value.length === 0) {
             isEditorModal.value = false;
         }
@@ -129,7 +129,6 @@ export async function updateNote(newNote) {
         return null;
     }
 }
-
 
 //刷新
 export async function refresh(){

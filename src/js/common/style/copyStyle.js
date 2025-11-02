@@ -20,3 +20,5 @@ export function copyUrl(){
         ElMessage(ElMessageConfig.buildConfig('error', error.message, false, 1500))
     }
 }
+
+

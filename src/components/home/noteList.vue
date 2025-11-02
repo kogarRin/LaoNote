@@ -1,9 +1,9 @@
 <script setup>
-import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
+import {showCreateInfo} from "@/src/js/common/use/getTimeAndDate.js";
 import {isEditorModal, selectedNoteIDs, isLoading} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
-import {searchResult} from "@/src/js/common/tool.js";
-import {playShowAni} from "@/src/js/common/cssTransition.js";
+import {searchResult} from "@/src/js/common/use/tool.js";
+import {playShowAni} from "@/src/js/common/comics/cssTransition.js";
 import {watch} from "vue";
 
 const router = useRouter();

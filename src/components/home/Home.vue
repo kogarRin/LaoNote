@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted} from "vue";
 import {Delete, Refresh, Search} from "@element-plus/icons-vue";
-import {searchInputContent, searchedNotes} from "@/src/js/common/tool.js";
+import {searchInputContent, searchedNotes} from "@/src/js/common/use/tool.js";
 import {
   isEditorModal,
   addOneNote,
@@ -13,8 +13,8 @@ import {
   noticeListenerDelete
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
-import {playShowAni} from "@/src/js/common/cssTransition.js";
-import {initGlobalTags} from "@/src/js/common/globalTags.js";
+import {playShowAni} from "@/src/js/common/comics/cssTransition.js";
+import {initGlobalTags} from "@/src/js/common/global/globalTags.js";
 
 onMounted( async () => {
   await initNotes();

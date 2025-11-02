@@ -1,6 +1,6 @@
 <script setup>
 import {InfoFilled} from "@element-plus/icons-vue";
-import {isCopy, copyUrl} from "@/src/js/common/copyStyle.js";
+import {isCopy, copyUrl} from "@/src/js/common/style/copyStyle.js";
 import {instructionView, editView, copyJson, settingStore} from "@/src/js/setting/mainSetting.js";
 import {storeToRefs} from "pinia";
 

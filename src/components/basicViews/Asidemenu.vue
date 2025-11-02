@@ -1,8 +1,7 @@
 <script setup lang="js">
 import {ref} from 'vue';
 import {Calendar, CollectionTag, Menu as IconMenu} from '@element-plus/icons-vue'
-import {addGlobalTags, globalTagsList, removeGlobalTag, removeAllGlobalTags} from "@/src/js/common/globalTags.js";
-
+import {addGlobalTags, globalTagsList, removeGlobalTag, removeAllGlobalTags} from "@/src/js/common/global/globalTags.js";
 
 const isCollapsed = ref(true);
 const calenderView = ref(false);
