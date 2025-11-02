@@ -70,7 +70,7 @@ export default class GlobalTagsDbToolClass {
         try{
             await this.#globalTagsDb.read();
             this.#globalTagsDb.update(({globalTags})=>{
-                lodash.pull(globalTags, allGlobalTags);
+                lodash.pullAll(globalTags, allGlobalTags);
             });
         } catch (error) {
             console.error(error);

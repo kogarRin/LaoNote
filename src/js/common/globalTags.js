@@ -63,9 +63,22 @@ export async function removeGlobalTag(tag) {
         if (index !== -1) {
             await window.electronAPI.deleteGlobalTags(tag);
             globalTagsList.value.splice(index, 1);
-            ElMessage(ElMessageConfig.buildConfig("success", "删除成功", true, 1000))
+            ElMessage(ElMessageConfig.buildConfig("success", "删除成功", true, 1000));
         }
     } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function removeAllGlobalTags(allTagsList) {
+    const getAllTags = [...allTagsList];
+    try {
+        await window.electronAPI.deleteAllGlobalTags(getAllTags);
+        globalTagsList.value = [];
+        ElMessage(ElMessageConfig.buildConfig("success", "删除成功", true, 1000));
+    } catch (error) {
+        globalTagsList.value = getAllTags;
+        ElMessage(ElMessageConfig.buildConfig("error", "删除失败", true, 1000));
         console.log(error);
     }
 }
