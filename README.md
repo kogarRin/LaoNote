@@ -2,6 +2,8 @@
 
 基于 Vue 3 和 Electron 构建的个人练习桌面笔记应用
 
+
+#### 注：此README.md由AI生成
 ## 技术架构
 
 - **前端框架**：Vue 3 + `<script setup>` 语法
