@@ -14,11 +14,15 @@ export function setBriefContent(dataObject, contentStringLength) {
 //搜索
 export const searchInputContent = ref('');
 export const searchResult = ref([]);
+export const isSearchMode = ref(false);
 export function searchedNotes(tokensOrContent){
     try {
         if (!tokensOrContent || tokensOrContent.trim() === '' || tokensOrContent.trim() === 'undefined') {
-            searchResult.value = [...notesFromDb.value];
-        } else {
+            isSearchMode.value = false;
+            return [];
+        }
+        else {
+            isSearchMode.value = !isSearchMode.value;
             let lowerQuery = tokensOrContent.trim().toLowerCase();
             searchResult.value = notesFromDb.value.filter(
                 (item) => (
