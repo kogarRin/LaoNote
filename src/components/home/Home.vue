@@ -13,13 +13,11 @@ import {
   noticeListenerDelete
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
-import {playShowAni} from "@/src/js/common/cssTransition.js";
 import {initGlobalTags} from "@/src/js/common/globalTags.js";
 
 onMounted( async () => {
   await initNotes();
   await initGlobalTags();
-  playShowAni();
 });
 
 </script>
