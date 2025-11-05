@@ -7,10 +7,6 @@ import {ElMessageConfig} from "@/src/js/config/messageType.js";
  */
 export const globalTagsList = ref([]);
 
-/**
- * @function getGlobalTags 获取渲染层标签数组
- * @returns {Promise<*>}
- */
 export async function getGlobalTags() {
     return await window.electronAPI.loadGlobalTags();
 }
@@ -74,11 +70,6 @@ export async function removeGlobalTag(tag) {
     }
 }
 
-/**
- * @function removeAllGlobalTags 批量删除全局标签
- * @param allTagsList 所有标签列表
- * @returns {Promise<void>}
- **/
 export async function removeAllGlobalTags(allTagsList) {
     const getAllTags = [...allTagsList];
     try {

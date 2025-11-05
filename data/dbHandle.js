@@ -46,7 +46,7 @@ export default class jsonDbToolClass {
             "content": "",
             "createAt": new Date(),
             "id": this.#setIdPrototype(),
-            "tags": [],
+            "tags": ['test tag1', 'test tag2'],
         })
         try {
             this.#jsonDb.read();

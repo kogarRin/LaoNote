@@ -3,7 +3,7 @@ import {editView, instructionView} from "@/src/js/setting/mainSetting.js";
 import './SettingContain.vue';
 import SettingContain from "@/src/components/setting/SettingContain.vue";
 import {handleNoteTable} from "@/src/js/setting/mainSetting.js";
-import {isCopy} from "@/src/js/common/style/copyStyle.js";
+import {isCopy} from "@/src/js/common/copyStyle.js";
 
 const {getAndCopyContent,getOutputContent,searchTitle,filterData} = handleNoteTable();
 
