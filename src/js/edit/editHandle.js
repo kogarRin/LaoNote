@@ -1,9 +1,8 @@
 import {ref, toRaw} from "vue";
-import {notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
+import {getNotesData, notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
 import {onBeforeRouteLeave} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {ElMessageConfig} from "@/src/js/config/messageType.js";
-import {searchResult} from "@/src/js/common/use/tool.js";
 
 export function useEditNote(route){
     //edit对象用于接收数据，作为渲染初始值
@@ -52,9 +51,7 @@ export function useEditNote(route){
             tagsRef.value.push(tag);
             inputValue.value = '';
             inputVisible.value = !inputVisible.value;
-            const index = notesFromDb.value.findIndex(item => item.id === noteId);
-            notesFromDb.value[index].tags = tagsRef.value;
-            searchResult.value = [...notesFromDb.value];
+            notesFromDb.value = await getNotesData();
             ElMessage(ElMessageConfig.buildConfig('success', '标签已保存', false, 1000));
             return null;
         } catch (error) {
@@ -78,8 +75,8 @@ export function useEditNote(route){
     }
 
     //删除标签
-    function deleteEditTags(noteId, tag){
-        window.electronAPI.deleteTags(noteId, tag)
+    function deleteTags(noteId, tag){
+        window.electronAPI.deleteTagsInNotes(noteId, tag)
         tagsRef.value.splice(tagsRef.value.indexOf(tag),1);
         ElMessage(ElMessageConfig.buildConfig('success', '已删除', false, 1000))
     }
@@ -123,6 +120,6 @@ export function useEditNote(route){
         cancelSetTag,
         saveClick,
         setRouteGuard,
-        deleteEditTags
+        deleteTags
     }
 }
