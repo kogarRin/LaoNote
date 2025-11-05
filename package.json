@@ -22,7 +22,7 @@
       "dist/**/*",
       "data/**/*",
       "electron/**/*",
-      "!node_modules/**/*"
+      "node_modules/**/*"
     ],
     "asar": true,
     "win": {
