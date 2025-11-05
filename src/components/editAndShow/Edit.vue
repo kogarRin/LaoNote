@@ -6,7 +6,7 @@ import {useEditNote} from "@/src/js/edit/editHandle.js";
 const objDate = new Date();
 const router = useRouter();
 const route = useRoute();
-const {contentRef, titleRef, tagsRef, saveClick, setRouteGuard, updateTags, cancelSetTag, deleteTags, inputValue, inputVisible} = useEditNote(route);
+const {contentRef, titleRef, tagsRef, saveClick, setRouteGuard, updateTags, cancelSetTag, deleteEditTags, inputValue, inputVisible} = useEditNote(route);
 
 // 路由守卫
 setRouteGuard();
@@ -54,7 +54,7 @@ const toShowForm = () => router.push({ name: 'showNote' });
               <el-tag
                   v-for="item in tagsRef"
                   :key="item"
-                  @close="deleteTags(route.params.id, item)"
+                  @close="deleteEditTags(route.params.id, item)"
                   closable
               >
                 {{ item }}
