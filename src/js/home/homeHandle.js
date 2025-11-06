@@ -1,7 +1,8 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "../config/messageType.js";
-import {searchResult} from "@/src/js/common/tool.js";
+import {emptyNoteType,searchResult} from "@/src/js/common/tool.js";
+
 
 const isInit = ref(false);
 export const notesFromDb = ref([]); //Object[]
@@ -21,8 +22,8 @@ export async function initNotes(){ //仅用于笔记和全局标签初始化，�
                     ElMessage(ElMessageConfig.buildConfig("success", notesCount > 0 ? `初始化成功,共有${notesCount}条笔记！` : "嘶~似乎没有记录", true, 1000));
                 }, 1300);
                 setTimeout(()=>{
-                    notesFromDb.value = setInitNotes;
-                    searchResult.value = [...notesFromDb.value];
+                    searchResult.value = [];
+                    notesFromDb.value = [...setInitNotes];
                     isLoading.value = !isLoading.value;
                 },1500);
             } else {
@@ -49,32 +50,18 @@ export async function getNotesData(){
 
 //新建
 export async function addOneNote() {
+    const setSaveNotesList = [...notesFromDb.value];
     try {
-        const curNotes = [...notesFromDb.value];
-        if (curNotes.length === 0){
-            await window.electronAPI.addNotes();
-            ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
-            notesFromDb.value = await getNotesData();
-            searchResult.value = [...notesFromDb.value];
-            return null;
-        }
-        if ((curNotes.reverse()[0].content && curNotes.reverse()[0].content.trim() !== "")) {
-            await window.electronAPI.addNotes();
-            ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 500));
-            notesFromDb.value = await getNotesData();
-            searchResult.value = [...notesFromDb.value];
-            return null;
-        } else {
-            ElMessage(ElMessageConfig.buildConfig("error", "性能较弱，请先编辑空白记录哦~~", true, 1500))
-        }
+        await window.electronAPI.addNotes();
+        notesFromDb.value.push(emptyNoteType)
+        ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 1000));
     } catch (error) {
+        notesFromDb.value = setSaveNotesList;
+        ElMessage(ElMessageConfig.buildConfig("error", "新建失败", true, 1000));
         console.error(error);
-        console.log([...notesFromDb.value])
-        ElMessage(ElMessageConfig.buildConfig("error", `发生错误${error.message}`, true, 1000));
         return null;
     }
 }
-
 
 //删除部分
 export async function deleteNote() {
@@ -94,21 +81,18 @@ export async function deleteNote() {
     }
 }
 export async function deleteConfirm() {
+    const setSaveNotesList = [...notesFromDb.value];
+    const deleteIdArray = [...selectedNoteIDs.value];
+    noticeListenerDelete.value = false;
     try {
-        const deleteIdArray = [...selectedNoteIDs.value];
         await window.electronAPI.deleteNote(deleteIdArray);
-        noticeListenerDelete.value = !noticeListenerDelete.value;
+        notesFromDb.value = notesFromDb.value.filter(n => !deleteIdArray.includes(n.id));
         selectedNoteIDs.value = [];
         ElMessage(ElMessageConfig.buildConfig("success", "删除记录成功！", true, 1000));
-        notesFromDb.value = await getNotesData();
-        searchResult.value = [...notesFromDb.value];
-        if (searchResult.value.length === 0) {
-            isEditorModal.value = false;
-        }
-        return null;
     } catch (error) {
         console.error(error);
-        return null;
+        notesFromDb.value = setSaveNotesList;
+        ElMessage(ElMessageConfig.buildConfig("error", "删除失败，已自动恢复", true, 1500));
     }
 }
 
@@ -130,19 +114,26 @@ export async function updateNote(newNote) {
     }
 }
 
-
 //刷新
 export async function refresh(){
-    searchResult.value = [];
+    notesFromDb.value = [];
+    const setSearchList = [...searchResult.value]
+    if (searchResult.value.length > 0){
+        searchResult.value = [];
+        setTimeout(() => {
+            searchResult.value = setSearchList;
+        },500);
+    }
     isLoading.value = !isLoading.value;
     setTimeout(async ()=>{
         ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 800));
     },500);
-    if (searchResult.value.length !== 0 || searchResult.value) {
+    if (notesFromDb.value.length !== 0 || notesFromDb.value) {
         setTimeout(async ()=>{
             notesFromDb.value = await window.electronAPI.getNotes();
-            searchResult.value = [...notesFromDb.value];
             isLoading.value = !isLoading.value;
+            console.log(notesFromDb.value);
         },500)
     }
 }
+

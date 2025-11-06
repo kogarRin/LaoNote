@@ -45,7 +45,7 @@ onMounted( async () => {
         <div class="headerContain">
           <div class="header">
             <div class="headerTitle">
-              <span><b>{{ new Date().getHours() > 12 ? (new Date().getHours() < 18 ? '下午好，一起摸鱼?' : '没睡，帮带个蜜雪?') : '起这么早，帮打个早八' }}</b></span>
+              <span><b>{{ new Date().getHours() > 11 ? (new Date().getHours() < 18 ? '下午好，一起摸鱼?' : '没睡，帮带个蜜雪?') : '起这么早，帮打个早八' }}</b></span>
             </div>
             <div class="searchDiv">
               <div>
