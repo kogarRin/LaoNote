@@ -1,5 +1,5 @@
 <script setup>
-import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
+import {showCreateInfo} from "@/src/js/common/tool.js";
 import {isEditorModal, selectedNoteIDs, isLoading, notesFromDb} from "@/src/js/home/homeHandle.js";
 import {useRouter} from "vue-router";
 import {isSearchMode, searchResult} from "@/src/js/common/tool.js";
@@ -93,7 +93,7 @@ const isNoDataHandle = () => (
                   </span>
                 </div>
                 <div>
-                  <el-tag v-for="tag in (eachNote.tags.length > 6 ? eachNote.tags.slice(0, 6) : eachNote.tags )" style="margin: 0 5px;">
+                  <el-tag v-for="tag in (eachNote.tags.length > 6 ? eachNote.tags.slice(0, 6) : eachNote.tags)" style="margin: 0 5px;">
                     {{(eachNote.tags.length < 6 ? tag : tag + '...')}}
                   </el-tag>
                 </div>

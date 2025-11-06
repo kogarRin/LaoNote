@@ -34,7 +34,7 @@
   flex-direction: column;
   height: calc(100vh - 70px);
 
-  .headerContain{
+  .headerContain {
     margin: 0 0 1em 0;
 
     .header {
@@ -42,19 +42,19 @@
       justify-content: space-between;
       align-items: center;
 
-      .headerTitle{
+      .headerTitle {
         margin-left: .6em;
       }
 
-      .headerButton{
+      .headerButton {
         display: flex;
         align-items: center;
         gap: .5em;
         margin-right: .6em;
 
-        .item{
+        .item {
 
-          #refreshIcon{
+          #refreshIcon {
             font-size: 1.5em;
           }
         }

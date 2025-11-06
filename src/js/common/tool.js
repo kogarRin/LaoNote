@@ -55,6 +55,6 @@ export const emptyNoteType = {
     content: "",
     createAt: new Date(),
     id: shortId(),
-    tags: ['test tag1', 'test tag2'],
+    tags: [],
 }
 

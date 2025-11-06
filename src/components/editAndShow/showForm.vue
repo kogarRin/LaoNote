@@ -1,13 +1,14 @@
 <script setup>
 import {notesFromDb} from "@/src/js/home/homeHandle.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Back} from "@element-plus/icons-vue";
 
 
 const router = useRouter();
+const route = useRoute();
 // 获取当前笔记对象
 let currentNoteObj = (
-    notesFromDb.value.find((item) => item.id === router.currentRoute.value.params.id)
+    notesFromDb.value.find((item) => item.id === route.params.id)
 );
 
 // 返回首页

@@ -36,12 +36,12 @@ const inputTag = ref("");
     v-model="tagsView"
     :show-close="false"
     title="管理标签"
-    style="min-width: 60%;"
+    style="min-width: 60%; user-select: none;"
     center
   >
     <div class="tagsStoreContainer">
       <div class="itemTitle">
-        <div>
+        <div style="user-select: none;">
           <h4>说明</h4>
           <div class="down">
             <p>此处用于存储标签，可以添加常用标签</p>
@@ -90,11 +90,16 @@ const inputTag = ref("");
           placeholder="输入标签名称"
           show-word-limit
           maxlength="10"
+          @keydown.enter="() => {
+            addGlobalTags(inputTag);inputTag='';
+          }"
       />
       <el-button
           type="primary"
           size="default"
-          @click="()=>{addGlobalTags(inputTag);inputTag='';tagInputView=false}"
+          @click="() => {
+            addGlobalTags(inputTag);inputTag='';
+          }"
       >
         添加
       </el-button>
