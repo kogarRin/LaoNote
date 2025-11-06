@@ -3,7 +3,6 @@ import {Low} from "lowdb";
 import {app} from "electron";
 import {JSONFile} from "lowdb/node";
 import {fileURLToPath} from "url";
-import {randomBytes} from "node:crypto"
 import lodash from "lodash";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,9 +23,8 @@ export default class jsonDbToolClass {
     }
 
     #setIdPrototype = () => {
-        const timeStringRandom = Date.now().toString();
-        const randomString = randomBytes(8).toString('base64url');
-        return timeStringRandom + randomString;
+        const tail = Math.random().toString(36).slice(-3); // 取后 3 位
+        return Date.now().toString(36) + tail;
     }
 
     async loadJsonDb(){ //唯一传指定数据类型的函数 Object[]
