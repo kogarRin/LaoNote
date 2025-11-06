@@ -2,8 +2,7 @@ import {computed, ref, watch} from "vue";
 import {buildAllJsonStructure} from "@/src/js/common/copyStyle.js";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "@/src/js/config/messageType.js";
-import {showCreateInfo} from "@/src/js/common/getTimeAndDate.js";
-import {setBriefContent} from "@/src/js/common/tool.js";
+import {setBriefContent, showCreateInfo} from "@/src/js/common/tool.js";
 import {notesFromDb} from "@/src/js/home/homeHandle.js";
 import {defineStore} from "pinia";
 
