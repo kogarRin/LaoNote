@@ -3,7 +3,6 @@ import {notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
 import {onBeforeRouteLeave} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {ElMessageConfig} from "@/src/js/config/messageType.js";
-import {searchResult} from "@/src/js/common/use/tool.js";
 
 export function useEditNote(route){
     //edit对象用于接收数据，作为渲染初始值
@@ -54,7 +53,6 @@ export function useEditNote(route){
             inputVisible.value = !inputVisible.value;
             const index = notesFromDb.value.findIndex(item => item.id === noteId);
             notesFromDb.value[index].tags = tagsRef.value;
-            searchResult.value = [...notesFromDb.value];
             ElMessage(ElMessageConfig.buildConfig('success', '标签已保存', false, 1000));
             return null;
         } catch (error) {
