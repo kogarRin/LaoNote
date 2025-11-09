@@ -1,7 +1,7 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {ElMessageConfig} from "../config/messageType.js";
-import {emptyNoteType,searchResult} from "@/src/js/common/tool.js";
+import {searchResult} from "@/src/js/common/tool.js";
 
 
 const isInit = ref(false);
@@ -53,7 +53,8 @@ export async function addOneNote() {
     const setSaveNotesList = [...notesFromDb.value];
     try {
         await window.electronAPI.addNotes();
-        notesFromDb.value.push(emptyNoteType)
+        notesFromDb.value = await window.electronAPI.getNotes();
+        await refresh();
         ElMessage(ElMessageConfig.buildConfig("success", "新建成功！", true, 1000));
     } catch (error) {
         notesFromDb.value = setSaveNotesList;
@@ -96,24 +97,6 @@ export async function deleteConfirm() {
     }
 }
 
-//更新
-export async function updateNote(newNote) {
-    try {
-        if (!newNote) {
-            return null;
-        } else {
-            await window.electronAPI.updateNote(newNote);
-            ElMessage(ElMessageConfig.buildConfig("success", "保存成功！", true, 1000));
-            notesFromDb.value = await getNotesData();
-            searchResult.value = [...notesFromDb.value];
-            return null;
-        }
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
-
 //刷新
 export async function refresh(){
     notesFromDb.value = [];
@@ -122,18 +105,19 @@ export async function refresh(){
         searchResult.value = [];
         setTimeout(() => {
             searchResult.value = setSearchList;
-        },500);
+        },300);
     }
     isLoading.value = !isLoading.value;
     setTimeout(async ()=>{
-        ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 800));
-    },500);
-    if (notesFromDb.value.length !== 0 || notesFromDb.value) {
-        setTimeout(async ()=>{
             notesFromDb.value = await window.electronAPI.getNotes();
             isLoading.value = !isLoading.value;
-            console.log(notesFromDb.value);
-        },500)
-    }
+    },300);
+}
+
+export async function refreshBtuClick() {
+    await refresh();
+    setTimeout(async ()=>{
+        ElMessage(ElMessageConfig.buildConfig("success", "刷新成功！", true, 800));
+    },500);
 }
 

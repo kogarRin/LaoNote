@@ -42,9 +42,10 @@ export default class jsonDbToolClass {
         const emptyNoteType = ()=> ({
             "title": "无标题",
             "content": "",
+            "tags": [],
             "createAt": new Date(),
             "id": this.#setIdPrototype(),
-            "tags": ['test tag1', 'test tag2'],
+
         })
         try {
             this.#jsonDb.read();
@@ -66,13 +67,11 @@ export default class jsonDbToolClass {
         return null;
     }
     deleteTagsInNotes(noteId, tag){
-        this.#jsonDb.read();
-        const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
         try {
-                this.#jsonDb.update(({notes})=>{
-                if (!notes[noteIndexForUpdate] || !Array.isArray(notes[noteIndexForUpdate].tags)){
-                    return null;
-                }
+            this.#jsonDb.read();
+            const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
+            this.#jsonDb.update(({notes})=> {
+                if (!notes[noteIndexForUpdate] || !Array.isArray(notes[noteIndexForUpdate].tags)) return null;
                 lodash.pull(notes[noteIndexForUpdate].tags, tag);
             })
         } catch (error) {
@@ -82,9 +81,9 @@ export default class jsonDbToolClass {
 
     //改
     async updateNoteJson(newNote){
-        this.#jsonDb.read();
-        const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === newNote.id)
         try {
+            await this.#jsonDb.read();
+            const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === newNote.id)
             if (noteIndexForUpdate === -1) {
                 return null;
             } else {

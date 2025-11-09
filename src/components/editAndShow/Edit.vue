@@ -12,7 +12,8 @@ const {contentRef, titleRef, tagsRef, saveClick, setRouteGuard, updateTags, canc
 setRouteGuard();
 
 //返回
-const toShowForm = () => router.push({ name: 'showNote' });
+const backHome = () => router.push({ name: 'home' });
+
 </script>
 
 <template>
@@ -32,7 +33,7 @@ const toShowForm = () => router.push({ name: 'showNote' });
         </div>
         <div class="buttonDiv">
           <div>
-            <el-button text @click="toShowForm">
+            <el-button text @click="backHome">
               <el-icon size="18px"><Back /></el-icon>
             </el-button>
             <el-button type="primary" @click="saveClick">保存</el-button>

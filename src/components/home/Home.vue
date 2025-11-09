@@ -10,7 +10,7 @@ import {
   deleteConfirm,
   initNotes,
   refresh,
-  noticeListenerDelete
+  noticeListenerDelete, refreshBtuClick
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
 import {initGlobalTags} from "@/src/js/common/globalTags.js";
@@ -88,7 +88,7 @@ onMounted( async () => {
               <div class="item">
                   <el-button
                       id="refreshIcon"
-                      @click="refresh"
+                      @click="refreshBtuClick()"
                       :disabled="isEditorModal"
                       circle
                   >

@@ -7,7 +7,7 @@ import {isSearchMode, searchResult} from "@/src/js/common/tool.js";
 
 const router = useRouter();
 
-function toShowForm(eachNoteId){
+function toEdit(eachNoteId){
   //判断是否处于编辑状态
   if (isEditorModal.value) {
     //如果处于编辑状态，判断id是否是选中状态
@@ -20,7 +20,7 @@ function toShowForm(eachNoteId){
     return null;
   } else {
     router.push({
-      name:'showNote',
+      name:'edit',
       params:{id: eachNoteId}
     });
   }
@@ -79,7 +79,7 @@ const isNoDataHandle = () => (
       <ul style="padding: 0" v-else>
         <li style="list-style-type: none;" v-for="eachNote in notesFromDb" :key="eachNote.id" class="contentsList">
           <input v-if="isEditorModal" type="checkbox" :value="eachNote.id" v-model="selectedNoteIDs">
-          <div class="noteContainer" @click="toShowForm(eachNote.id)">
+          <div class="noteContainer" @click="toEdit(eachNote.id)">
             <div class="noteInfoContain">
               <div class="contentTitle">
                 <span>

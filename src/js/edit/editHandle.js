@@ -1,39 +1,44 @@
-import {ref, toRaw} from "vue";
-import {notesFromDb, updateNote} from "@/src/js/home/homeHandle.js";
+import {ref} from "vue";
+import {notesFromDb} from "@/src/js/home/homeHandle.js";
 import {onBeforeRouteLeave} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {ElMessageConfig} from "@/src/js/config/messageType.js";
 
 export function useEditNote(route){
-    //edit对象用于接收数据，作为渲染初始值
-    let editNoteObj =  JSON.parse(JSON.stringify(
-        toRaw(notesFromDb.value.find(item => item.id === route.params.id)) || {}
-    ));
+    //ori对象用于接收数据，作为渲染初始值
 
-    const contentRef = ref(editNoteObj.content);
-    const titleRef = ref(editNoteObj.title);
-    const tagsRef = ref(editNoteObj.tags);
+    const oriNoteObj = notesFromDb.value.find(item => item.id === route.params.id);
+    console.log(oriNoteObj);
+    const contentRef = ref(oriNoteObj.content);
+    const titleRef = ref(oriNoteObj.title);
+    const tagsRef = ref(oriNoteObj.tags);
     const inputVisible = ref(false);
     const inputValue = ref('');
-    let getNewNote = {};
 
-    //获取更新的笔记
-    function setUpdateNote(){
-        const payload =  toRaw({
-            title: titleRef.value,
-            content: contentRef.value,
-            createAt: editNoteObj.createAt,
-            id: editNoteObj.id,
-            tags: editNoteObj.tags
-        })
-        return JSON.parse(JSON.stringify(payload))
-    }
 
     //点击保存
     async function saveClick(){
-        const payload = setUpdateNote();
-        await updateNote(payload);
-        getNewNote = JSON.parse(JSON.stringify(payload));
+        const payload = JSON.parse(JSON.stringify(
+            {
+                id: oriNoteObj.id,
+                title: titleRef.value,
+                content: contentRef.value,
+                tags: tagsRef.value,
+                createAt: oriNoteObj.createAt
+            }
+        ));
+        notesFromDb.value.splice(
+            notesFromDb.value.findIndex(
+                item => item.id === payload.id
+            ), 1, payload);
+        try {
+            console.log(payload);
+            await window.electronAPI.updateNote(payload);
+
+            ElMessage(ElMessageConfig.buildConfig('success', '已保存', false, 1000));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     //更新标签
@@ -84,29 +89,21 @@ export function useEditNote(route){
 
     //路由守卫
     function setRouteGuard(){
-        onBeforeRouteLeave((to, from, next) => {
-            const currentNote = setUpdateNote();
-            if (
-                currentNote.content === editNoteObj.content && currentNote.title === editNoteObj.title
-            ) {
+        onBeforeRouteLeave(async (to, from, next) => {
+            const current = { title: titleRef.value, content: contentRef.value };
+            const afterSaved = notesFromDb.value.find(item => item.id === route.params.id);
+            if (current.title === afterSaved.title && current.content === afterSaved.content) {
                 return next();
             }
-            const isSaved = () =>
-                currentNote.content === getNewNote.content && currentNote.title === getNewNote.title;
-            if (isSaved()) {
-                return next();
-            }
-            ElMessageBox.confirm('当前内容未保存，是否保存？', '提示', {
-                confirmButtonText: '保存',
-                cancelButtonText: '取消',
-                showClose: false,
-                callback: async (action) => {
-                    if (action === 'confirm') {
-                        await saveClick();
+             await ElMessageBox.confirm('当前内容未保存，是否保存？', '提示', {
+                    confirmButtonText: '保存',
+                    cancelButtonText: '取消',
+                    showClose: false,
+                    callback: async (action) => {
+                        if (action === 'confirm') await saveClick();
+                        next();
                     }
-                    next();
-                }
-            }).then(() => {});
+             });
         });
     }
 
@@ -116,7 +113,6 @@ export function useEditNote(route){
         tagsRef,
         inputVisible,
         inputValue,
-        editNoteObj,
         updateTags,
         cancelSetTag,
         saveClick,
