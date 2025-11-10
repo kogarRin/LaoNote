@@ -28,13 +28,14 @@ export function searchedNotes(tokensOrContent){
             isSearchMode.value = false;
         }
         else {
-            isSearchMode.value = !isSearchMode.value;
+            isSearchMode.value = true;
             let lowerQuery = tokensOrContent.trim().toLowerCase();
             searchResult.value = notesFromDb.value.filter(
                 (item) => (
                     item.title.toLowerCase().includes(lowerQuery) || item.content.toLowerCase().includes(lowerQuery)
                 )
             );
+            ElMessage(ElMessageConfig.buildConfig('success', `共找到${searchResult.value.length}条记录`, true, 800));
         }
     } catch (error) {
         ElMessage(ElMessageConfig.buildConfig('error', error.message, true, 1500));
@@ -51,10 +52,10 @@ function shortId() {
 
 //空记录样式
 export const emptyNoteType = {
+    id: shortId(),
     title: "无标题",
     content: "",
-    createAt: new Date(),
-    id: shortId(),
     tags: [],
+    createAt: new Date(),
 }
 

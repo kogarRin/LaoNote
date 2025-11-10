@@ -2,15 +2,14 @@
 import {notesFromDb} from "@/src/js/home/homeHandle.js";
 import {useRoute, useRouter} from "vue-router";
 import {Back} from "@element-plus/icons-vue";
+import {ref} from "vue";
 
 
 const router = useRouter();
 const route = useRoute();
+const toShowNote = ref();
 // 获取当前笔记对象
-let currentNoteObj = (
-    notesFromDb.value.find((item) => item.id === route.params.id)
-);
-
+toShowNote.value = notesFromDb.value.find((item) => item.id === route.params.id);
 // 返回首页
 function backHome(){
     router.push({name: "home"});
@@ -18,16 +17,40 @@ function backHome(){
 
 // 格式化笔记内容
 function textFormat(text){
-  return  text.content.split("\n").filter((item)=>item.trim()!=="");
+  try {
+    if (!text || text.trim() === "") return [];
+    if (!/\n$/.test(text)) {
+      console.log("text:", text)
+     return text;
+    }
+    console.log("text:", text)
+    return text.split("\n").filter((item) => item.trim()!== "");
+  } catch (error) {
+    console.log("return:", text)
+    console.log(error);
+    return [];
+  }
 }
-const praArray = textFormat(currentNoteObj);
-
+function getPraArray(toFormatContent){
+  try {
+    if (!toFormatContent) return [];
+    if (Array.isArray(toFormatContent)) {
+      return toFormatContent;
+    }
+    String(toFormatContent).trim();
+    console.log(Array(1).fill(toFormatContent));
+    return Array(1).fill(toFormatContent);
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
 //编辑页面
 function toEdit(){
   router.push({
     name: "edit",
     params: {
-      id: currentNoteObj.id
+      id: toShowNote.value.id
     }
   });
 }
@@ -42,7 +65,7 @@ function toEdit(){
         fill>
       <el-card>
         <div class="headerForm">
-          <h1 class="title">{{currentNoteObj.title}}</h1>
+          <h1 class="title">{{toShowNote}}</h1>
           <div class="buttonsContainer">
             <el-button text @click="backHome">
               <el-icon size="18px"><Back /></el-icon>
@@ -56,7 +79,7 @@ function toEdit(){
         </el-divider>
         <div class="contentForm">
           <el-scrollbar>
-            <p v-for="(item, index) in praArray" :key="index">{{item}}</p>
+            <p v-for="(item, index) in awa" style="background-color: #808890" :key="index">{{item}}</p>
           </el-scrollbar>
         </div>
       </el-card>
