@@ -9,7 +9,6 @@ import {
   deleteNote,
   deleteConfirm,
   initNotes,
-  refresh,
   noticeListenerDelete, refreshBtuClick
 } from "@/src/js/home/homeHandle.js";
 import noteList from "@/src/components/home/noteList.vue";
@@ -40,7 +39,6 @@ onMounted( async () => {
       <el-button type="primary"  @click="deleteConfirm">确定</el-button>
     </div>
   </el-dialog>
-
   <div class="mainContentContain">
         <div class="headerContain">
           <div class="header">

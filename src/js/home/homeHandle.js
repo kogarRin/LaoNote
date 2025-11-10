@@ -43,11 +43,6 @@ export async function initNotes(){ //仅用于笔记和全局标签初始化，�
     }
 }
 
-//可以多次掉用,适用于仅仅获取录记数据
-export async function getNotesData(){
-    return await window.electronAPI.getNotes();
-}
-
 //新建
 export async function addOneNote() {
     const setSaveNotesList = [...notesFromDb.value];

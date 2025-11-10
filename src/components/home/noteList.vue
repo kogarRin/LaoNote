@@ -44,7 +44,7 @@ const isNoDataHandle = () => (
       <ul style="padding: 0" v-if="isSearchMode">
         <li style="list-style-type: none;" v-for="eachNote in searchResult" :key="eachNote.id" class="contentsList">
           <input v-if="isEditorModal" type="checkbox" :value="eachNote.id" v-model="selectedNoteIDs">
-          <div class="noteContainer" @click="toShowForm(eachNote.id)">
+          <div class="noteContainer" @click="toEdit(eachNote.id)">
             <div class="noteInfoContain">
               <div class="contentTitle">
                 <span>

@@ -48,9 +48,9 @@ export default class jsonDbToolClass {
 
         })
         try {
-            this.#jsonDb.read();
+            await this.#jsonDb.read();
             this.#jsonDb.data.notes.push(emptyNoteType());
-            this.#jsonDb.write();
+            await this.#jsonDb.write();
             return null;
         } catch (err){
             return null;
@@ -59,10 +59,10 @@ export default class jsonDbToolClass {
 
     //删
     async deleteNoteJson(idArray){
-        this.#jsonDb.read();
+        await this.#jsonDb.read();
         if (Array.isArray(idArray) || idArray.length !== 0) {
             lodash.remove(this.#jsonDb.data.notes, item => idArray.includes(item.id));
-            this.#jsonDb.write();
+            await this.#jsonDb.write();
         }
         return null;
     }
@@ -98,7 +98,7 @@ export default class jsonDbToolClass {
         }
     }
     async updateTags(noteId, tag){
-        this.#jsonDb.read();
+        await this.#jsonDb.read();
         const noteIndexForUpdate = this.#jsonDb.data.notes.findIndex((item) => item.id === noteId)
         try {
             if (noteIndexForUpdate === -1) {
