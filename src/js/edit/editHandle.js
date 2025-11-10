@@ -8,7 +8,6 @@ export function useEditNote(route){
     //ori对象用于接收数据，作为渲染初始值
 
     const oriNoteObj = notesFromDb.value.find(item => item.id === route.params.id);
-    console.log(oriNoteObj);
     const contentRef = ref(oriNoteObj.content);
     const titleRef = ref(oriNoteObj.title);
     const tagsRef = ref(oriNoteObj.tags);

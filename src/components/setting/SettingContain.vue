@@ -128,7 +128,7 @@ const {isDark, fontsList, activeEn} = storeToRefs(settingStore());
                 </div>
                 <div class="repo" @click="copyUrl">
                   <el-tooltip placement="top" effect="dark" content="点击复制仓库地址">
-                    <u style="font-size: 14px;">Gitee仓库</u>
+                    <u style="font-size: 14px;">Github仓库</u>
                   </el-tooltip>
                 </div>
               </div>

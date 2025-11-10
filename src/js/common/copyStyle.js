@@ -12,7 +12,7 @@ export const buildAllJsonStructure = () => {
 
 //复制仓库url
 export function copyUrl(){
-    const url = 'https://gitee.com/kogarrin/lao-note'
+    const url = 'https://github.com/kogarRin/LaoNote'
     try {
         navigator.clipboard.writeText(url).then(() => {});
         ElMessage(ElMessageConfig.buildConfig('success', '复制成功', false, 1500))

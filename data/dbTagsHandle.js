@@ -21,7 +21,14 @@ export default class GlobalTagsDbToolClass {
     constructor() {
         this.#globalTagsFilePath = getDataDir();
         const adapter = new JSONFile(this.#globalTagsFilePath);
-        this.#globalTagsDb = new Low(adapter, {notes: [] ,globalTags: []});
+        this.#globalTagsDb = new Low(adapter, {globalTags: []});
+    }
+
+    async addGlobaTagsInJson() {
+        await this.#globalTagsDb.read();
+        if (!Array.isArray(this.#globalTagsDb.data.globalTags)) {
+            this.#globalTagsDb.data.globalTags = [];
+        }
     }
 
     // 获取
@@ -38,9 +45,9 @@ export default class GlobalTagsDbToolClass {
      //增加globalTags
      async addGlobalTags(Tag){
         try {
-            await this.#globalTagsDb.read();
+            await this.addGlobaTagsInJson();
             this.#globalTagsDb.data.globalTags.push(Tag);
-            this.#globalTagsDb.write();
+            await this.#globalTagsDb.write();
         } catch (error) {
             console.error(error);
             return null;
