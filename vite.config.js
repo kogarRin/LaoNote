@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "path";
+import {fileURLToPath} from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-export default defineConfig({
+const viteConfig = defineConfig({
   plugins: [vue()],
   server: {
-    port: 5173,
+    port: 5171,
     strictPort: false
   },
   base: './',
@@ -20,4 +23,6 @@ export default defineConfig({
       '@': path.resolve(__dirname)
     }
   }
-})
+});
+
+export default viteConfig;

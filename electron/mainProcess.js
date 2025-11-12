@@ -6,6 +6,7 @@ import path from 'path';
 import JsonDbToolClass, {getDataDir} from "../data/dbHandle.js";
 import * as fs from "node:fs";
 import GlobalTagsDbToolClass from "../data/dbTagsHandle.js";
+import viteConfig from "../vite.config.js";
 
 let win;
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +34,7 @@ function createWindow() {
 
     if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools();
-        win.loadURL('http://localhost:5173');
+        win.loadURL(`http://localhost:${viteConfig.server.port}`);
     } else {
         win.loadFile(path.join(__dirname, '../dist/index.html'))
     }
