@@ -17,13 +17,15 @@
 
   .contentForm {
     height: calc(85vh - 100px);
+    width: 100%;
     text-align: left;
 
-    p{
+    p {
       margin: .5em 1em .5em 1em;
-      height: 100%;
+      height: fit-content;
       white-space: pre-wrap;
       text-indent: 2em;
+      overflow-wrap: anywhere; //换行
     }
   }
 }
