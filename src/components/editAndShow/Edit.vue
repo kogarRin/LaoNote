@@ -13,7 +13,8 @@ setRouteGuard();
 
 //返回
 const backHome = () => router.push({ name: 'home' });
-
+const toShowForm = () => router.push({ name: 'showNote', params: { id: route.params.id } });
+console.log(route.params.id);
 </script>
 
 <template>
@@ -36,6 +37,7 @@ const backHome = () => router.push({ name: 'home' });
             <el-button text @click="backHome">
               <el-icon size="18px"><Back /></el-icon>
             </el-button>
+            <el-button type="default" @click="toShowForm(route.params.id)">预览</el-button>
             <el-button type="primary" @click="saveClick">保存</el-button>
           </div>
         </div>
