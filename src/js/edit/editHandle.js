@@ -106,6 +106,23 @@ export function useEditNote(route){
         });
     }
 
+    async function selectedTags(noteId, tag){
+        try {
+            if (tagsRef.value.includes(tag)){
+                ElMessage(ElMessageConfig.buildConfig('warning', '标签已存在', false, 1000));
+                return null;
+            }
+            await window.electronAPI.updateTags(noteId, tag);
+            tagsRef.value.push(tag);
+            const index = notesFromDb.value.findIndex(item => item.id === noteId);
+            notesFromDb.value[index].tags = tagsRef.value;
+            ElMessage(ElMessageConfig.buildConfig('success', '标签已添加', false, 1000));
+            return null;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return{
         contentRef,
         titleRef,
@@ -116,6 +133,7 @@ export function useEditNote(route){
         cancelSetTag,
         saveClick,
         setRouteGuard,
-        deleteEditTags
+        deleteEditTags,
+        selectedTags
     }
 }
