@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain ,dialog} from 'electron';
+import { app, BrowserWindow, ipcMain, shell, dialog} from 'electron';
 import {fileURLToPath} from 'url';
 import {mkdir} from 'fs/promises';
 import Store from 'electron-store';
@@ -38,6 +38,7 @@ function createWindow() {
     } else {
         win.loadFile(path.join(__dirname, '../dist/index.html'))
     }
+
 }
 
 app.whenReady().then(() => {
@@ -49,6 +50,13 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
+app.on('web-contents-created', (_, webContents) => {
+    webContents.setWindowOpenHandler(({url}) => {
+        shell.openExternal(url).then(() => {} );
+        return { action: 'deny' };
+    })
+})
 
 ipcMain.handle('mini-window',  () => {
     win.minimize();

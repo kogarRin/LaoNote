@@ -5,6 +5,9 @@ const routes = [
         path: '/', name: 'home', component: () => import('../components/home/Home.vue')
     },
     {
+        path: '/tools', name: 'tools', component: () => import('../components/tools/Tools.vue')
+    },
+    {
         path: '/edit/:id', name: 'edit' , component: () => import('../components/editAndShow/Edit.vue')
     },
     {

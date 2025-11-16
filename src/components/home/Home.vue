@@ -100,7 +100,6 @@ onMounted( async () => {
         </div>
 
         <noteList />
-
   </div>
 
 </template>
